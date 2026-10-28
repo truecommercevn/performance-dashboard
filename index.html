@@ -1,0 +1,2615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>People Performance Dashboard v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500&family=Manrope:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+/* ============================================================
+   TRUECOMMERCE BRAND VARIABLES
+   ============================================================ */
+:root {
+  --tc-dark:  #00112A;
+  --tc-bold:  #002855;
+  --tc-brand: #007DBB;
+  --tc-shine: #1FB4FF;
+  --tc-light: #C0E7FF;
+  --tc-soft:  #F7FCFE;
+  --tc-white: #FFFFFF;
+  --tc-star:  #FFAA00;
+  --font-heading: 'Aptos', 'Segoe UI', sans-serif;
+  --font-body:    'Aptos', 'Segoe UI', sans-serif;
+  --radius-lg: 24px;
+  --radius-sm: 12px;
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-body);
+  background: var(--tc-soft);
+  color: var(--tc-dark);
+  min-height: 100vh;
+  font-size: 14px;
+}
+button { cursor: pointer; font-family: var(--font-body); }
+a { color: var(--tc-brand); }
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.header {
+  background: linear-gradient(135deg, var(--tc-dark), var(--tc-bold));
+  padding: 18px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 16px rgba(0,17,42,0.35);
+}
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.header-logo-wrap {
+  display: flex;
+  align-items: center;
+}
+.header-logo-wrap img {
+  height: 30px;
+  width: auto;
+  display: block;
+  display: block;
+}
+.header-title {
+  font-size: 13px;
+  color: var(--tc-light);
+  font-weight: 400;
+  letter-spacing: 0.2px;
+}
+.header-divider {
+  width: 1px; height: 36px;
+  background: rgba(255,255,255,0.2);
+}
+.demo-badge {
+  background: var(--tc-star);
+  color: var(--tc-dark);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================================
+   CONTROLS BAR
+   ============================================================ */
+.controls-bar {
+  background: var(--tc-white);
+  padding: 12px 32px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  border-bottom: 1px solid #dde9f5;
+  flex-wrap: wrap;
+  min-height: 52px;
+}
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.control-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--tc-brand);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+select {
+  font-family: var(--font-body);
+  font-size: 13px;
+  padding: 6px 12px;
+  border: 1.5px solid var(--tc-light);
+  border-radius: var(--radius-sm);
+  background: var(--tc-soft);
+  color: var(--tc-dark);
+  outline: none;
+  transition: border-color 0.2s;
+  cursor: pointer;
+}
+select:focus { border-color: var(--tc-brand); }
+
+.btn-ghost {
+  background: none;
+  border: 1.5px solid var(--tc-light);
+  border-radius: var(--radius-sm);
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--tc-brand);
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn-ghost:hover { background: var(--tc-soft); border-color: var(--tc-brand); }
+
+.back-btn { display: none; }
+.back-btn.visible { display: flex; }
+
+.emp-name-chip {
+  display: none;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--tc-dark);
+}
+.emp-name-chip.visible { display: block; }
+
+.ml-auto { margin-left: auto; }
+
+/* ============================================================
+   MAIN LAYOUT
+   ============================================================ */
+.main {
+  padding: 24px 32px 40px;
+  max-width: 1400px;
+}
+
+/* ============================================================
+   TABS
+   ============================================================ */
+.tabs {
+  display: flex;
+  background: var(--tc-white);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  border: 1px solid #dde9f5;
+  border-bottom: none;
+  overflow: hidden;
+}
+.tab-btn {
+  flex: 1;
+  padding: 14px 28px;
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 700;
+  color: #7a8fa8;
+  transition: all 0.15s;
+  border-bottom: 3px solid transparent;
+  letter-spacing: 0.2px;
+}
+.tab-btn.active {
+  color: var(--tc-brand);
+  background: var(--tc-soft);
+  border-bottom-color: var(--tc-brand);
+}
+.tab-btn:hover:not(.active) {
+  color: var(--tc-dark);
+  background: rgba(0,125,187,0.04);
+}
+
+.tab-panel {
+  display: none;
+  background: var(--tc-white);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  border: 1px solid #dde9f5;
+  padding: 28px;
+}
+.tab-panel.active { display: block; }
+
+/* ============================================================
+   MATRIX
+   ============================================================ */
+.matrix-wrap {
+  width: 100%;
+  margin-bottom: 22px;
+}
+.matrix-wrap svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.color-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 28px;
+  padding: 10px 18px;
+  background: var(--tc-soft);
+  border: 1px solid #dde9f5;
+  border-radius: var(--radius-sm);
+  margin-bottom: 18px;
+  font-size: 12px;
+}
+.legend-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--tc-brand);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  flex-basis: 100%;
+  margin-bottom: 2px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--tc-dark);
+}
+.leg-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   BREAKDOWN GRID (team view, below matrix)
+   ============================================================ */
+.breakdown-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+.breakdown-card {
+  background: var(--tc-soft);
+  border: 1px solid #dde9f5;
+  border-radius: var(--radius-sm);
+  padding: 18px;
+}
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--tc-brand);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+.quadrant-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-bottom: 7px;
+  font-size: 13px;
+}
+.quadrant-row:last-child { margin-bottom: 0; }
+.q-label { font-weight: 700; font-size: 13px; }
+.q-names { font-size: 11px; color: #6b7f93; margin-top: 2px; }
+.q-count {
+  background: rgba(255,255,255,0.7);
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  min-width: 28px;
+  text-align: center;
+}
+
+.color-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-bottom: 7px;
+  background: var(--tc-white);
+  font-size: 13px;
+}
+.color-row:last-child { margin-bottom: 0; }
+.cc-dot {
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.cc-name { font-weight: 700; }
+.cc-desc { font-size: 11px; color: #6b7f93; }
+.cc-count { margin-left: auto; font-weight: 700; color: var(--tc-dark); }
+
+/* ============================================================
+   TEAM TABLE
+   ============================================================ */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.data-table th {
+  background: var(--tc-soft);
+  padding: 9px 14px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--tc-brand);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid var(--tc-light);
+  white-space: nowrap;
+}
+.data-table td {
+  padding: 9px 14px;
+  border-bottom: 1px solid #edf2f8;
+  color: var(--tc-dark);
+  vertical-align: middle;
+}
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tbody tr:hover td {
+  background: rgba(31,180,255,0.05);
+  cursor: pointer;
+}
+.name-link {
+  font-weight: 700;
+  color: var(--tc-brand);
+  text-decoration: none;
+}
+.name-link:hover { text-decoration: underline; }
+
+/* ============================================================
+   SCORE CARDS (individual view)
+   ============================================================ */
+.score-cards-row {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.score-card {
+  background: #f0f5fa;
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+.sc-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #667a8a;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.sc-value {
+  font-size: 28px;
+  font-weight: 500;
+  color: #00112A;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.sc-max { font-size: 13px; color: #96acbf; font-weight: 400; }
+.gauge-bar {
+  height: 4px;
+  background: #d8e5f0;
+  border-radius: 2px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+.gauge-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--tc-shine), var(--tc-star));
+  transition: width 0.5s ease;
+}
+
+/* Manager's Note box */
+.mgr-note {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-left: 4px solid #f59e0b;
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  color: #1e2d3d;
+  line-height: 1.5;
+}
+.mgr-note-icon {
+  font-size: 16px;
+  color: #b45309;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.mgr-note-meta {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: #92400e;
+  margin-bottom: 4px;
+}
+.mgr-note-text { font-style: italic; }
+
+/* Delta chips */
+.delta-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+.d-up   { background: #dcfce7; color: #16a34a; }
+.d-down { background: #fee2e2; color: #dc2626; }
+.d-zero { background: #f1f5f9; color: #64748b; }
+
+/* Risk card variant */
+.score-card.risk-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.sc-risk-label {
+  font-size: 20px;
+  font-weight: 600;
+  color: #00112A;
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+.risk-pill {
+  display: inline-block;
+  padding: 4px 14px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.rp-high     { background: #fee2e2; color: #dc2626; }
+.rp-moderate { background: #fef3c7; color: #b45309; }
+.rp-low      { background: #dcfce7; color: #16a34a; }
+
+/* ============================================================
+   BEHAVIORAL SIGNALS
+   ============================================================ */
+.signals-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+.signal-group-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #7a8fa8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+}
+.signal-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  background: var(--tc-soft);
+  font-size: 13px;
+}
+.signal-item:last-child { margin-bottom: 0; }
+.sig-icon {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 700;
+  flex-shrink: 0;
+}
+.sig-yes     { background: #ffebee; color: #e53935; }
+.sig-no      { background: #e8f5e9; color: #43a047; }
+.sig-unknown { background: #fef9c3; color: #ca8a04; }
+.sig-yes-text     { font-weight: 700; color: #c62828; }
+.sig-unknown-text { color: #92400e; font-style: italic; }
+
+/* ============================================================
+   HISTORY TABLE
+   ============================================================ */
+.history-section { margin-top: 0; }
+.d-pos { color: #43a047; font-weight: 700; }
+.d-neg { color: #e53935; font-weight: 700; }
+.d-zer { color: #94a3b8; }
+.period-current {
+  color: var(--tc-brand);
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-left: 6px;
+}
+
+/* ============================================================
+   SIGNAL BARS (team FR breakdown)
+   ============================================================ */
+.sig-bar-row { margin-bottom: 10px; }
+.sig-bar-row:last-child { margin-bottom: 0; }
+.sig-bar-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+.sig-bar-name { font-weight: 700; color: var(--tc-dark); }
+.sig-bar-count { color: #7a8fa8; }
+.sig-bar-track {
+  height: 6px;
+  background: #e8f0fe;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.sig-bar-fill { height: 100%; border-radius: 3px; }
+
+/* ============================================================
+   RISK LABELS (table)
+   ============================================================ */
+.risk-pill-sm {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* ── Signal icons (FR team table) ── */
+.sig-wrap { display: flex; gap: 3px; flex-wrap: wrap; align-items: center; }
+.sig-icon {
+  position: relative;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; border-radius: 4px;
+  flex-shrink: 0; font-size: 13px; cursor: default;
+}
+.sig-icon.frust  { background: #fef3c7; color: #92400e; }
+.sig-icon.flight { background: #fee2e2; color: #991b1b; }
+.sig-icon .sig-tip {
+  position: absolute; bottom: calc(100% + 5px); left: 50%;
+  transform: translateX(-50%);
+  background: #1e2d3d; color: #fff;
+  font-size: 11px; padding: 3px 8px; border-radius: 4px;
+  white-space: nowrap; pointer-events: none;
+  opacity: 0; transition: opacity .15s; z-index: 200;
+}
+.sig-icon:hover .sig-tip { opacity: 1; }
+
+/* ── FR Alert Banner (individual view) ── */
+.fr-alert-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  margin-bottom: 14px;
+  cursor: pointer;
+  border: 0.5px solid;
+  transition: opacity .15s;
+}
+.fr-alert-banner:hover { opacity: .88; }
+.fr-alert-banner.risk-high     { background: #fff0f0; border-color: #f5c1c1; }
+.fr-alert-banner.risk-moderate { background: #fff8ed; border-color: #fac775; }
+.fr-alert-icon { font-size: 16px; margin-top: 1px; flex-shrink: 0; }
+.fr-alert-title { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+.fr-alert-banner.risk-high     .fr-alert-title { color: #a32d2d; }
+.fr-alert-banner.risk-moderate .fr-alert-title { color: #854f0b; }
+.fr-alert-sub { font-size: 12px; color: #667a8a; }
+.fr-alert-arrow { margin-left: auto; font-size: 14px; color: #9ca3af; align-self: center; }
+
+
+/* ============================================================
+   LOADING / ERROR
+   ============================================================ */
+.loading-state {
+  text-align: center;
+  padding: 64px 32px;
+  color: #7a8fa8;
+}
+.spinner {
+  width: 32px; height: 32px;
+  border: 3px solid var(--tc-light);
+  border-top-color: var(--tc-brand);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin: 0 auto 16px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.error-state {
+  background: #fff5f5;
+  border: 1px solid #fecaca;
+  border-radius: var(--radius-sm);
+  padding: 20px 24px;
+  color: #991b1b;
+  font-size: 13px;
+}
+.error-state code {
+  background: #fee2e2;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+/* ============================================================
+   INDIVIDUAL VIEW — 2-COLUMN OPTION D LAYOUT
+   ============================================================ */
+.emp-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+.emp-col {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  overflow: hidden;
+}
+/* Option A: white card, left border accent */
+.emp-sw-card {
+  background: var(--surface-2, #fff);
+  border: 0.5px solid var(--border, #e5e7eb);
+  border-left: 3px solid #1B6FC8;
+  border-radius: 0 10px 10px 0;
+}
+.emp-fr-card {
+  background: var(--surface-2, #fff);
+  border: 0.5px solid var(--border, #e5e7eb);
+  border-left: 3px solid #d97706;
+  border-radius: 0 10px 10px 0;
+}
+.emp-col-header {
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  letter-spacing: .01em;
+  border-bottom: 0.5px solid var(--border, #e5e7eb);
+}
+.sw-header {
+  background: var(--surface-2, #fff);
+  color: #1B6FC8;
+}
+.fr-header {
+  background: var(--surface-2, #fff);
+  color: #b45309;
+}
+.emp-col-inner {
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.emp-col-inner .matrix-wrap {
+  margin-top: auto;
+}
+/* Score cards inside Option A white card use surface-1 tint */
+.emp-sw-card .score-card,
+.emp-fr-card .score-card {
+  background: var(--surface-1, #f9fafb);
+}
+/* Matrix area white inset */
+.emp-matrix-bg {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 4px;
+}
+/* Full-width bottom section headers */
+.emp-section-title {
+  font-size: 14px;
+  font-weight: 700;
+  padding: 9px 16px;
+  border-radius: 8px 8px 0 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  letter-spacing: .01em;
+}
+.emp-section-title-sw {
+  background: var(--surface-2, #fff);
+  color: #1B6FC8;
+  border-bottom: 0.5px solid var(--border, #e5e7eb);
+}
+.emp-section-title-fr {
+  background: var(--surface-2, #fff);
+  color: #b45309;
+  border-bottom: 0.5px solid var(--border, #e5e7eb);
+}
+.emp-history-sw {
+  background: var(--surface-2, #fff);
+  border: 0.5px solid var(--border, #e5e7eb);
+  border-left: 3px solid #1B6FC8;
+  border-radius: 0 10px 10px 0;
+  overflow: hidden;
+}
+.emp-history-sw #e-merged-history {
+  padding: 14px 16px 16px;
+}
+.emp-history-fr {
+  background: var(--surface-2, #fff);
+  border: 0.5px solid var(--border, #e5e7eb);
+  border-left: 3px solid #d97706;
+  border-radius: 0 10px 10px 0;
+  overflow: hidden;
+}
+.emp-fr-body {
+  padding: 14px 16px 16px;
+}
+/* Signal legend */
+.sig-legend {
+  display: flex;
+  gap: 16px;
+  font-size: 12px;
+  color: #445566;
+  flex-wrap: wrap;
+}
+.sig-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+}
+.sig-dot-sm {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 700;
+}
+.sig-yes-sm { background: #fee2e2; color: #dc2626; }
+.sig-no-sm  { background: #dcfce7; color: #15803d; }
+.sig-unk-sm { background: #fef9c3; color: #a16207; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1100px) {
+  .emp-two-col { grid-template-columns: 1fr; }
+}
+@media (max-width: 800px) {
+  .main          { padding: 16px; }
+  .score-cards   { flex-direction: column; }
+  .breakdown-grid { grid-template-columns: 1fr; }
+  .signals-grid  { grid-template-columns: 1fr; }
+  .header        { padding: 14px 16px; }
+  .controls-bar  { padding: 10px 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     HEADER
+     ============================================================ -->
+<div class="header">
+  <div class="header-brand">
+    <div class="header-logo-wrap">
+      <img src="data:image/png;base64,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" alt="TrueCommerce" />
+    </div>
+    <div>
+      <div class="header-title">People Performance Dashboard</div>
+    </div>
+    <div class="header-divider"></div>
+    <span id="demo-badge" class="demo-badge">Demo Mode</span>
+  </div>
+</div>
+
+<!-- ============================================================
+     CONTROLS BAR
+     ============================================================ -->
+<div class="controls-bar">
+  <button type="button" class="btn-ghost back-btn" id="back-btn" onclick="showTeamView()">
+    ← Back to Team
+  </button>
+  <div class="emp-name-chip" id="emp-name-chip"></div>
+
+  <div class="control-group" id="slt-group">
+    <span class="control-label">SLT</span>
+    <select id="slt-sel" onchange="onSLTChange()">
+      <option value="All">All SLTs</option>
+    </select>
+  </div>
+  <div class="control-group" id="emp-slt-chip" style="display:none">
+    <span class="control-label">SLT</span>
+    <span id="emp-slt-val" style="font-size:13px;font-weight:500;color:#00112A;padding:4px 10px;background:#f0f5fa;border-radius:6px;border:0.5px solid #d0dde8"></span>
+  </div>
+
+  <div class="control-group" id="manager-group">
+    <span class="control-label">Supervisor</span>
+    <select id="manager-sel" onchange="onManagerChange()">
+      <option value="All">All Supervisors</option>
+    </select>
+  </div>
+
+  <div class="control-group" id="platform-group">
+    <span class="control-label">Platform</span>
+    <select id="platform-sel" onchange="applyFilters()">
+      <option value="All">All Platforms</option>
+    </select>
+  </div>
+  <div class="control-group" id="emp-platform-chip" style="display:none">
+    <span class="control-label">Platform</span>
+    <span id="emp-platform-val" style="font-size:13px;font-weight:500;color:#00112A;padding:4px 10px;background:#f0f5fa;border-radius:6px;border:0.5px solid #d0dde8"></span>
+  </div>
+  <div class="control-group" id="emp-supervisor-chip" style="display:none">
+    <span class="control-label">Supervisor</span>
+    <span id="emp-supervisor-val" style="font-size:13px;font-weight:500;color:#00112A;padding:4px 10px;background:#f0f5fa;border-radius:6px;border:0.5px solid #d0dde8"></span>
+  </div>
+
+  <div class="control-group">
+    <span class="control-label">Period</span>
+    <select id="period-sel" onchange="applyFilters()"></select>
+  </div>
+
+  <div class="ml-auto">
+    <button type="button" class="btn-ghost" onclick="refreshData()">↻ Refresh</button>
+  </div>
+</div>
+
+<!-- ============================================================
+     MAIN
+     ============================================================ -->
+<div class="main">
+
+  <!-- ── TEAM VIEW ──────────────────────────────────────────── -->
+  <div id="team-view">
+    <div class="tabs">
+      <button type="button" class="tab-btn active" onclick="switchTab('team','sw',0)">Skill / Will Matrix</button>
+      <button type="button" class="tab-btn"        onclick="switchTab('team','fr',1)">Flight Risk Matrix</button>
+    </div>
+
+    <!-- Team · Skill/Will -->
+    <div class="tab-panel active" id="t-sw">
+      <div id="t-sw-stats"></div>
+      <div class="matrix-wrap" id="t-sw-svg"></div>
+      <div class="color-legend">
+        <div class="legend-title">Color Code</div>
+        <span class="legend-item"><span class="leg-dot" style="background:#22c55e"></span><strong>Green</strong> — Demonstrating growth and material improvement</span>
+        <span class="legend-item"><span class="leg-dot" style="background:#eab308"></span><strong>Yellow</strong> — Possible concerns or new hire (too early to tell)</span>
+        <span class="legend-item"><span class="leg-dot" style="background:#ef4444"></span><strong>Red</strong> — Regressing and requiring PIP</span>
+        <span class="legend-item"><span class="leg-dot" style="background:#374151"></span><strong>Black</strong> — Steady, no change</span>
+      </div>
+      <div class="breakdown-grid">
+        <div class="breakdown-card">
+          <div class="section-label">Quadrant Breakdown</div>
+          <div id="t-sw-quads"></div>
+        </div>
+        <div class="breakdown-card">
+          <div class="section-label">Color Code Status</div>
+          <div id="t-sw-colors"></div>
+        </div>
+      </div>
+      <div class="section-label">Team Members</div>
+      <div id="t-sw-table"></div>
+    </div>
+
+    <!-- Team · Flight Risk -->
+    <div class="tab-panel" id="t-fr">
+      <div id="t-fr-stats"></div>
+      <div class="matrix-wrap" id="t-fr-svg"></div>
+      <div class="breakdown-grid">
+        <div class="breakdown-card">
+          <div class="section-label">Risk Level Breakdown</div>
+          <div id="t-fr-quads"></div>
+        </div>
+        <div class="breakdown-card">
+          <div class="section-label">Top Active Signals</div>
+          <div id="t-fr-sigs"></div>
+        </div>
+      </div>
+      <div class="section-label">Team Members</div>
+      <div id="t-fr-table"></div>
+    </div>
+  </div><!-- /team-view -->
+
+  <!-- ── INDIVIDUAL VIEW ────────────────────────────────────── -->
+  <div id="individual-view" style="display:none">
+    <div id="fr-alert-banner"></div>
+
+    <!-- 2-column Option D: full colored card per section -->
+    <div class="emp-two-col">
+
+      <!-- Left: Skill / Will — blue card -->
+      <div class="emp-col emp-sw-card">
+        <div class="emp-col-header sw-header">
+          <i class="ti ti-brain" aria-hidden="true"></i> Skill / Will
+        </div>
+        <div class="emp-col-inner">
+          <div id="e-sw-scores"></div>
+          <div id="e-sw-trend" style="margin-bottom:16px"></div>
+          <div class="matrix-wrap emp-matrix-bg" id="e-sw-svg"></div>
+        </div>
+      </div>
+
+      <!-- Right: Flight Risk — amber card -->
+      <div class="emp-col emp-fr-card">
+        <div class="emp-col-header fr-header">
+          <i class="ti ti-plane-departure" aria-hidden="true"></i> Flight Risk
+        </div>
+        <div class="emp-col-inner">
+          <div id="e-fr-scores"></div>
+          <div id="e-fr-trend" style="margin-bottom:16px"></div>
+          <div class="matrix-wrap emp-matrix-bg" id="e-fr-svg"></div>
+        </div>
+      </div>
+    </div><!-- /emp-two-col -->
+
+    <!-- Manager Notes (full width) -->
+    <div id="e-sw-note" style="margin-top:14px"></div>
+    <div id="e-fr-note" style="margin-top:8px"></div>
+
+    <!-- Skill/Will History — blue themed -->
+    <div class="emp-history-sw" style="margin-top:22px">
+      <div class="emp-section-title emp-section-title-sw">
+        <i class="ti ti-brain" aria-hidden="true"></i> Skill/Will History
+      </div>
+      <div id="e-merged-history"></div>
+    </div>
+
+    <!-- Flight Risk Indicators — amber themed -->
+    <div class="emp-history-fr" style="margin-top:20px">
+      <div class="emp-section-title emp-section-title-fr">
+        <i class="ti ti-plane-departure" aria-hidden="true"></i>
+        Flight Risk Indicators — <span id="e-fr-period-label"></span>
+      </div>
+      <div class="emp-fr-body">
+        <div class="sig-legend" style="margin:0 0 14px">
+          <span class="sig-legend-item"><span class="sig-dot-sm sig-yes-sm">✓</span> Confirmed</span>
+          <span class="sig-legend-item"><span class="sig-dot-sm sig-no-sm">—</span> No</span>
+          <span class="sig-legend-item"><span class="sig-dot-sm sig-unk-sm">?</span> Unknown</span>
+        </div>
+        <div id="e-fr-signals"></div>
+      </div>
+    </div>
+  </div><!-- /individual-view -->
+
+</div><!-- /main -->
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+/* ============================================================
+   ██████╗  CONFIG  — edit before deploying
+   ============================================================ */
+const CONFIG = {
+  /* Set DEMO_MODE:false + host HTML on SharePoint to use live data */
+  DEMO_MODE   : false,
+
+  siteUrl     : 'https://tcapc.sharepoint.com/sites/performance',
+  defaultPeriod : 'H1 2026',
+
+  /* English display names for SLTs/supervisors who are not tracked as
+     employees in the SW/FR lists (so they don't appear in allData).
+     Key = Full_Name (Vietnamese format), Value = Display_Name (English).
+     Add new SLTs/senior managers here when they join.                   */
+  nameOverrides : {
+    'Nguyen, Thi Anh Nguyet' : 'Amy Nguyen',
+    'Nguyen, Thien Toan'     : 'Toan Nguyen',
+    'Thach, Soc Kha'         : 'Kha Thach',
+    'Thai, Bao Thanh'        : 'Thanh Thai'
+  }
+};
+
+/* Returns { email, isHR, lists: [{sw, fr}, ...] } for the logged-in user.
+   List names are read from Manager_Map (SW_List / FR_List columns) — no hardcoding needed. */
+async function getCurrentUserInfo () {
+  // 1. Get current user email
+  const userResp = await fetch(`${CONFIG.siteUrl}/_api/web/currentuser`,
+    { headers: { 'Accept': 'application/json;odata=verbose' }, credentials: 'same-origin' });
+  if (!userResp.ok) throw new Error('Could not retrieve current user.');
+  const userJson = await userResp.json();
+  const email = (userJson.d.Email || '').toLowerCase();
+
+  // 2. Fetch all Manager_Map rows (small list — fetch all, filter client-side)
+  const mapResp = await fetch(
+    `${CONFIG.siteUrl}/_api/web/lists/getbytitle('Manager_Map')/items?$top=500`,
+    { headers: { 'Accept': 'application/json;odata=verbose' }, credentials: 'same-origin' });
+  if (!mapResp.ok) throw new Error('Could not load Manager_Map.');
+  const mapJson = await mapResp.json();
+  const allEntries = mapJson.d.results;
+
+  const entry = allEntries.find(r => (r.Manager_Email || r.Title || '').toLowerCase() === email);
+
+  // If not in Manager_Map, check if user is a Site Owner — owners get full access
+  if (!entry) {
+    const ownerResp = await fetch(`${CONFIG.siteUrl}/_api/web/associatedownergroup/users`,
+      { headers: { 'Accept': 'application/json;odata=verbose' }, credentials: 'same-origin' });
+    if (ownerResp.ok) {
+      const ownerJson = await ownerResp.json();
+      const isOwner = ownerJson.d.results.some(u => (u.Email || '').toLowerCase() === email);
+      if (isOwner) {
+        const listsResp = await fetch(`${CONFIG.siteUrl}/_api/web/lists?$select=Title&$filter=startswith(Title,'Skill/Will')&$top=500`,
+          { headers: { 'Accept': 'application/json;odata=verbose' }, credentials: 'same-origin' });
+        const listsJson = await listsResp.json();
+        const lists = listsJson.d.results.map(l => {
+          const entry = allEntries.find(e => (e.SW_List || '').trim() === l.Title.trim());
+          return { sw: l.Title, fr: l.Title.replace('Skill/Will', 'Retention Risk'), sltName: entry ? (entry.SLT_Name || '') : '' };
+        });
+        return { email, isHR: true, lists };
+      }
+    }
+    throw new Error('Access denied: your account (' + email + ') is not registered in Manager_Map.');
+  }
+
+  const isHR = !!entry.Is_HR;
+
+  if (isHR) {
+    // HR sees all — discover every Skill/Will list on the site and pair with Retention Risk
+    const listsResp = await fetch(
+      `${CONFIG.siteUrl}/_api/web/lists?$select=Title&$filter=startswith(Title,'Skill/Will')&$top=500`,
+      { headers: { 'Accept': 'application/json;odata=verbose' }, credentials: 'same-origin' });
+    if (!listsResp.ok) throw new Error('Could not enumerate site lists.');
+    const listsJson = await listsResp.json();
+    const lists = listsJson.d.results.map(l => {
+      const entry = allEntries.find(e => (e.SW_List || '').trim() === l.Title.trim());
+      return {
+        sw: l.Title,
+        fr: l.Title.replace('Skill/Will', 'Retention Risk'),
+        sltName: entry ? (entry.SLT_Name || '') : ''
+      };
+    });
+    return { email, isHR: true, lists };
+  }
+
+  // Manager — use their own SW_List / FR_List
+  if (!entry.SW_List || !entry.FR_List) throw new Error('SW_List or FR_List not set in Manager_Map for ' + email);
+  return { email, isHR: false, sltName: entry.SLT_Name, lists: [{ sw: entry.SW_List.trim(), fr: entry.FR_List.trim(), sltName: entry.SLT_Name || '' }] };
+}
+
+/* ============================================================
+   DEMO DATA  (remove / ignore once using real SharePoint data)
+   ============================================================ */
+const DEMO_DATA = [
+  // H1 2025
+  { Full_Name:'Nguyen, Hai', UKG_ID:'TC001', Display_Name:'Nguyen, Hai', Job_Title:'Sr Software Engineer',     Platform:'DIC',     Hire_Date:'2019-03-10', Supervisor:'Quynh Vo', Period:'H1 2025', Skill_Score:7,  Will_Score:8,  Color_Code:'Green',  PR_Score:4.2, Justification:'Strong performer, ready for lead role.',         Frustration:2, Flight_Potential:2,    Sig_Complaining:'No', Sig_Conflict:'No', Sig_LowEnergy:'No', Sig_PerformanceDrop:'No', Sig_NoGrowthInterest:'No', Sig_UpdatedLinkedIn:'No', Sig_FrequentLeaves:'No', Sig_LessCommitment:'No', Sig_ComparingSalary:'No', Sig_HeadhuntingContact:'No' },
+  { Full_Name:'Le, Trang',   UKG_ID:'TC002', Display_Name:'Le, Trang',   Job_Title:'Software Engineer',        Platform:'DIC',     Hire_Date:'2021-07-01', Supervisor:'Quynh Vo', Period:'H1 2025', Skill_Score:5,  Will_Score:6,  Color_Code:'Yellow', PR_Score:3.5, Justification:'Good potential, needs more exposure.',           Frustration:3, Flight_Potential:2,               Sig_Complaining:'No', Sig_Conflict:'No', Sig_LowEnergy:'No', Sig_PerformanceDrop:'No', Sig_NoGrowthInterest:'No', Sig_UpdatedLinkedIn:'No', Sig_FrequentLeaves:'No', Sig_LessCommitment:'No', Sig_ComparingSalary:'No', Sig_HeadhuntingContact:'No' },
+  { Full_Name:'Pham, Duc',   UKG_ID:'TC003', Display_Name:'Pham, Duc',   Job_Title:'QA Engineer',              Platform:'EDIAPI',  Hire_Date:'2020-01-15', Supervisor:'Quynh Vo', Period:'H1 2025', Skill_Score:4,  Will_Score:7,  Color_Code:'Yellow', PR_Score:3.2, Justification:'High will, training in progress.',               Frustration:2, Flight_Potential:3,               Sig_Complaining:'No', Sig_Conflict:'No', Sig_LowEnergy:'No', Sig_PerformanceDrop:'No', Sig_NoGrowthInterest:'No', Sig_UpdatedLinkedIn:'No', Sig_FrequentLeaves:'No', Sig_LessCommitment:'No', Sig_ComparingSalary:'No', Sig_HeadhuntingContact:'No' },
+  { Full_Name:'Tran, Minh',  UKG_ID:'TC004', Display_Name:'Tran, Minh',  Job_Title:'Product Manager',          Platform:'DIC',     Hire_Date:'2018-06-20', Supervisor:'Quynh Vo', Period:'H1 2025', Skill_Score:8,  Will_Score:9,  Color_Code:'Green',  PR_Score:4.8, Justification:'Excellent all-round. Promotion candidate.',     Frustration:1, Flight_Potential:1,  Sig_Complaining:'No', Sig_Conflict:'No', Sig_LowEnergy:'No', Sig_PerformanceDrop:'No', Sig_NoGrowthInterest:'No', Sig_UpdatedLinkedIn:'No', Sig_FrequentLeaves:'No', Sig_LessCommitment:'No', Sig_ComparingSalary:'No', Sig_HeadhuntingContact:'No' },
+  { Full_Name:'Hoang, Kim',  UKG_ID:'TC005', Display_Name:'Hoang, Kim',  Job_Title:'Business Analyst',         Platform:'EDIAPI',  Hire_Date:'2022-09-12', Supervisor:'Quynh Vo', Period:'H1 2025', Skill_Score:4,  Will_Score:3,  Color_Code:'Red',    PR_Score:2.1, Justification:'PIP initiated. Needs close monitoring.',        Frustration:5, Flight_Potential:5,     Sig_Complaining:'Yes',  Sig_Conflict:'Yes',  Sig_LowEnergy:'Yes',  Sig_PerformanceDrop:'Yes',  Sig_NoGrowthInterest:'Yes',  Sig_UpdatedLinkedIn:'Yes',  Sig_FrequentLeaves:'Yes',  Sig_LessCommitment:'Yes',  Sig_ComparingSalary:'Yes',  Sig_HeadhuntingContact:'No' },
+  { Full_Name:'Vo, Linh',    UKG_ID:'TC006', Display_Name:'Vo, Linh',    Job_Title:'Sr Business Analyst',      Platform:'DIC',     Hire_Date:'2017-04-01', Supervisor:'Quynh Vo', Period:'H1 2025', Skill_Score:7,  Will_Score:5,  Color_Code:'Black',  PR_Score:4.0, Justification:'Stable. Not interested in promotion.',          Frustration:4, Flight_Potential:5,      Sig_Complaining:'No', Sig_Conflict:'No', Sig_LowEnergy:'Yes',  Sig_PerformanceDrop:'No', Sig_NoGrowthInterest:'Yes',  Sig_UpdatedLinkedIn:'No', Sig_FrequentLeaves:'No', Sig_LessCommitment:'Yes',  Sig_ComparingSalary:'Yes',  Sig_HeadhuntingContact:'No' },
+  { Full_Name:'Dang, Long',  UKG_ID:'TC007', Display_Name:'Dang, Long',  Job_Title:'DevOps Engineer',          Platform:'EDIAPI',  Hire_Date:'2023-02-14', Supervisor:'Quynh Vo', Period:'H1 2025', Skill_Score:3,  Will_Score:4,  Color_Code:'Yellow', PR_Score:2.8, Justification:'New hire, ramping up.',                         Frustration:2, Flight_Potential:2,    Sig_Complaining:'No', Sig_Conflict:'No', Sig_LowEnergy:'No', Sig_PerformanceDrop:'No', Sig_NoGrowthInterest:'No', Sig_UpdatedLinkedIn:'No', Sig_FrequentLeaves:'No', Sig_LessCommitment:'No', Sig_ComparingSalary:'No', Sig_HeadhuntingContact:'No' },
+  { Full_Name:'Bui, Thu',    UKG_ID:'TC008', Display_Name:'Bui, Thu',    Job_Title:'Scrum Master',             Platform:'DIC',     Hire_Date:'2020-11-30', Supervisor:'Quynh Vo', Period:'H1 2025', Skill_Score:6,  Will_Score:6,  Color_Code:'Green',  PR_Score:3.8, Justification:'Solid. Considered for Agile Coach role.',       Frustration:3, Flight_Potential:4, Sig_Complaining:'No', Sig_Conflict:'No', Sig_LowEnergy:'No', Sig_PerformanceDrop:'No', Sig_NoGrowthInterest:'No', Sig_UpdatedLinkedIn:'Yes',  Sig_FrequentLeaves:'No', Sig_LessCommitment:'No', Sig_ComparingSalary:'Yes',  Sig_HeadhuntingContact:'No' },
+
+  // H2 2025
+  { Full_Name:'Nguyen, Hai', UKG_ID:'TC001', Display_Name:'Nguyen, Hai', Job_Title:'Sr Software Engineer',     Platform:'DIC',     Hire_Date:'2019-03-10', Supervisor:'Quynh Vo', Period:'H2 2025', Skill_Score:8,  Will_Score:8,  Color_Code:'Green',  PR_Score:4.5, Justification:'Promoted to Tech Lead.',                        Frustration:2, Flight_Potential:1,  Sig_Complaining:'No', Sig_Conflict:'No', Sig_LowEnergy:'No', Sig_PerformanceDrop:'No', Sig_NoGrowthInterest:'No', Sig_UpdatedLinkedIn:'No', Sig_FrequentLeaves:'No', Sig_LessCommitment:'No', Sig_ComparingSalary:'No', Sig_HeadhuntingContact:'No' },
+  { Full_Name:'Le, Trang',   UKG_ID:'TC002', Display_Name:'Le, Trang',   Job_Title:'Software Engineer',        Platform:'DIC',     Hire_Date:'2021-07-01', Supervisor:'Quynh Vo', Period:'H2 2025', Skill_Score:6,  Will_Score:7,  Color_Code:'Green',  PR_Score:4.0, Justification:'Great improvement this half.',                  Frustration:2, Flight_Potential:2,               Sig_Complaining:'No', Sig_Conflict:'No', Sig_LowEnergy:'No', Sig_PerformanceDrop:'No', Sig_NoGrowthInterest:'No', Sig_UpdatedLinkedIn:'No', Sig_FrequentLeaves:'No', Sig_LessCommitment:'No', Sig_ComparingSalary:'No', Sig_HeadhuntingContact:'No' },
+  { Full_Name:'Pham, Duc',   UKG_ID:'TC003', Display_Name:'Pham, Duc',   Job_Title:'QA Engineer',              Platform:'EDIAPI',  Hire_Date:'2020-01-15', Supervisor:'Quynh Vo', Period:'H2 2025', Skill_Score:5,  Will_Score:7,  Color_Code:'Yellow', PR_Score:3.5, Justification:'Improving steadily.',                           Frustration:3, Flight_Potential:3,               Sig_Complaining:'No', Sig_Conflict:'No', Sig_LowEnergy:'No', Sig_PerformanceDrop:'No', Sig_NoGrowthInterest:'No', Sig_UpdatedLinkedIn:'No', Sig_FrequentLeaves:'No', Sig_LessCommitment:'No', Sig_ComparingSalary:'No', Sig_HeadhuntingContact:'No' },
+  { Full_Name:'Tran, Minh',  UKG_ID:'TC004', Display_Name:'Tran, Minh',  Job_Title:'Product Manager',          Platform:'DIC',     Hire_Date:'2018-06-20', Supervisor:'Quynh Vo', Period:'H2 2025', Skill_Score:9,  Will_Score:9,  Color_Code:'Green',  PR_Score:5.0, Justification:'Outstanding. Ready for senior PM.',             Frustration:1, Flight_Potential:1,               Sig_Complaining:'No', Sig_Conflict:'No', Sig_LowEnergy:'No', Sig_PerformanceDrop:'No', Sig_NoGrowthInterest:'No', Sig_UpdatedLinkedIn:'No', Sig_FrequentLeaves:'No', Sig_LessCommitment:'No', Sig_ComparingSalary:'No', Sig_HeadhuntingContact:'No' },
+  { Full_Name:'Hoang, Kim',  UKG_ID:'TC005', Display_Name:'Hoang, Kim',  Job_Title:'Business Analyst',         Platform:'EDIAPI',  Hire_Date:'2022-09-12', Supervisor:'Quynh Vo', Period:'H2 2025', Skill_Score:4,  Will_Score:4,  Color_Code:'Red',    PR_Score:2.4, Justification:'PIP ongoing.',                                  Frustration:5, Flight_Potential:5, Sig_Complaining:'Yes',  Sig_Conflict:'Yes',  Sig_LowEnergy:'Yes',  Sig_PerformanceDrop:'Yes',  Sig_NoGrowthInterest:'Yes',  Sig_UpdatedLinkedIn:'Yes',  Sig_FrequentLeaves:'Yes',  Sig_LessCommitment:'Yes',  Sig_ComparingSalary:'Yes',  Sig_HeadhuntingContact:'Yes'  },
+  { Full_Name:'Vo, Linh',    UKG_ID:'TC006', Display_Name:'Vo, Linh',    Job_Title:'Sr Business Analyst',      Platform:'DIC',     Hire_Date:'2017-04-01', Supervisor:'Quynh Vo', Period:'H2 2025', Skill_Score:7,  Will_Score:6,  Color_Code:'Black',  PR_Score:4.1, Justification:'Stable. Happy without promotion.',              Frustration:3, Flight_Potential:4, Sig_Complaining:'No', Sig_Conflict:'No', Sig_LowEnergy:'No', Sig_PerformanceDrop:'No', Sig_NoGrowthInterest:'Yes',  Sig_UpdatedLinkedIn:'No', Sig_FrequentLeaves:'No', Sig_LessCommitment:'No', Sig_ComparingSalary:'Yes',  Sig_HeadhuntingContact:'No' },
+  { Full_Name:'Dang, Long',  UKG_ID:'TC007', Display_Name:'Dang, Long',  Job_Title:'DevOps Engineer',          Platform:'EDIAPI',  Hire_Date:'2023-02-14', Supervisor:'Quynh Vo', Period:'H2 2025', Skill_Score:4,  Will_Score:5,  Color_Code:'Yellow', PR_Score:3.1, Justification:'Continued growth.',                             Frustration:2, Flight_Potential:2,               Sig_Complaining:'No', Sig_Conflict:'No', Sig_LowEnergy:'No', Sig_PerformanceDrop:'No', Sig_NoGrowthInterest:'No', Sig_UpdatedLinkedIn:'No', Sig_FrequentLeaves:'No', Sig_LessCommitment:'No', Sig_ComparingSalary:'No', Sig_HeadhuntingContact:'No' },
+  { Full_Name:'Bui, Thu',    UKG_ID:'TC008', Display_Name:'Bui, Thu',    Job_Title:'Scrum Master',             Platform:'DIC',     Hire_Date:'2020-11-30', Supervisor:'Quynh Vo', Period:'H2 2025', Skill_Score:7,  Will_Score:7,  Color_Code:'Green',  PR_Score:4.2, Justification:'Coaching role confirmed.',                      Frustration:2, Flight_Potential:3,  Sig_Complaining:'No', Sig_Conflict:'No', Sig_LowEnergy:'No', Sig_PerformanceDrop:'No', Sig_NoGrowthInterest:'No', Sig_UpdatedLinkedIn:'No', Sig_FrequentLeaves:'No', Sig_LessCommitment:'No', Sig_ComparingSalary:'No', Sig_HeadhuntingContact:'No' },
+
+  // H1 2026
+  { Full_Name:'Nguyen, Hai', UKG_ID:'TC001', Display_Name:'Nguyen, Hai', Job_Title:'Tech Lead',                Platform:'DIC',     Hire_Date:'2019-03-10', Supervisor:'Quynh Vo', Period:'H1 2026', Skill_Score:9,  Will_Score:9,  Color_Code:'Green',  PR_Score:4.8, Justification:'Top performer. Stretch goals set.',             Frustration:1, Flight_Potential:1,               Sig_Complaining:'No', Sig_Conflict:'No', Sig_LowEnergy:'No', Sig_PerformanceDrop:'No', Sig_NoGrowthInterest:'No', Sig_UpdatedLinkedIn:'No', Sig_FrequentLeaves:'No', Sig_LessCommitment:'No', Sig_ComparingSalary:'No', Sig_HeadhuntingContact:'No' },
+  { Full_Name:'Le, Trang',   UKG_ID:'TC002', Display_Name:'Le, Trang',   Job_Title:'Software Engineer',        Platform:'DIC',     Hire_Date:'2021-07-01', Supervisor:'Quynh Vo', Period:'H1 2026', Skill_Score:7,  Will_Score:7,  Color_Code:'Green',  PR_Score:4.3, Justification:'Ready for senior role next cycle.',             Frustration:2, Flight_Potential:2,               Sig_Complaining:'No', Sig_Conflict:'No', Sig_LowEnergy:'No', Sig_PerformanceDrop:'No', Sig_NoGrowthInterest:'No', Sig_UpdatedLinkedIn:'No', Sig_FrequentLeaves:'No', Sig_LessCommitment:'No', Sig_ComparingSalary:'No', Sig_HeadhuntingContact:'No' },
+  { Full_Name:'Pham, Duc',   UKG_ID:'TC003', Display_Name:'Pham, Duc',   Job_Title:'QA Engineer',              Platform:'EDIAPI',  Hire_Date:'2020-01-15', Supervisor:'Quynh Vo', Period:'H1 2026', Skill_Score:6,  Will_Score:8,  Color_Code:'Green',  PR_Score:3.9, Justification:'Test automation project going well.',           Frustration:2, Flight_Potential:3,  Sig_Complaining:'No', Sig_Conflict:'No', Sig_LowEnergy:'No', Sig_PerformanceDrop:'No', Sig_NoGrowthInterest:'No', Sig_UpdatedLinkedIn:'No', Sig_FrequentLeaves:'No', Sig_LessCommitment:'No', Sig_ComparingSalary:'No', Sig_HeadhuntingContact:'No' },
+  { Full_Name:'Tran, Minh',  UKG_ID:'TC004', Display_Name:'Tran, Minh',  Job_Title:'Senior Product Manager',   Platform:'DIC',     Hire_Date:'2018-06-20', Supervisor:'Quynh Vo', Period:'H1 2026', Skill_Score:9,  Will_Score:9,  Color_Code:'Green',  PR_Score:5.0, Justification:'Exceptional. Succession planning target.',     Frustration:1, Flight_Potential:1,               Sig_Complaining:'No', Sig_Conflict:'No', Sig_LowEnergy:'No', Sig_PerformanceDrop:'No', Sig_NoGrowthInterest:'No', Sig_UpdatedLinkedIn:'No', Sig_FrequentLeaves:'No', Sig_LessCommitment:'No', Sig_ComparingSalary:'No', Sig_HeadhuntingContact:'No' },
+  { Full_Name:'Hoang, Kim',  UKG_ID:'TC005', Display_Name:'Hoang, Kim',  Job_Title:'Business Analyst',         Platform:'EDIAPI',  Hire_Date:'2022-09-12', Supervisor:'Quynh Vo', Period:'H1 2026', Skill_Score:5,  Will_Score:5,  Color_Code:'Yellow', PR_Score:2.9, Justification:'PIP completed. On notice.',                    Frustration:4, Flight_Potential:4,   Sig_Complaining:'Yes',  Sig_Conflict:'No', Sig_LowEnergy:'Yes',  Sig_PerformanceDrop:'No', Sig_NoGrowthInterest:'Yes',  Sig_UpdatedLinkedIn:'Yes',  Sig_FrequentLeaves:'No', Sig_LessCommitment:'Yes',  Sig_ComparingSalary:'Yes',  Sig_HeadhuntingContact:'No' },
+  { Full_Name:'Vo, Linh',    UKG_ID:'TC006', Display_Name:'Vo, Linh',    Job_Title:'Sr Business Analyst',      Platform:'DIC',     Hire_Date:'2017-04-01', Supervisor:'Quynh Vo', Period:'H1 2026', Skill_Score:7,  Will_Score:6,  Color_Code:'Black',  PR_Score:4.0, Justification:'Consistent. Not seeking growth.',               Frustration:3, Flight_Potential:4,  Sig_Complaining:'No', Sig_Conflict:'No', Sig_LowEnergy:'No', Sig_PerformanceDrop:'No', Sig_NoGrowthInterest:'Yes',  Sig_UpdatedLinkedIn:'No', Sig_FrequentLeaves:'No', Sig_LessCommitment:'No', Sig_ComparingSalary:'Yes',  Sig_HeadhuntingContact:'No' },
+  { Full_Name:'Dang, Long',  UKG_ID:'TC007', Display_Name:'Dang, Long',  Job_Title:'DevOps Engineer',          Platform:'EDIAPI',  Hire_Date:'2023-02-14', Supervisor:'Quynh Vo', Period:'H1 2026', Skill_Score:5,  Will_Score:6,  Color_Code:'Yellow', PR_Score:3.4, Justification:'CI/CD ownership this period.',                 Frustration:2, Flight_Potential:2,               Sig_Complaining:'No', Sig_Conflict:'No', Sig_LowEnergy:'No', Sig_PerformanceDrop:'No', Sig_NoGrowthInterest:'No', Sig_UpdatedLinkedIn:'No', Sig_FrequentLeaves:'No', Sig_LessCommitment:'No', Sig_ComparingSalary:'No', Sig_HeadhuntingContact:'No' },
+  { Full_Name:'Bui, Thu',    UKG_ID:'TC008', Display_Name:'Bui, Thu',    Job_Title:'Agile Coach',              Platform:'DIC',     Hire_Date:'2020-11-30', Supervisor:'Quynh Vo', Period:'H1 2026', Skill_Score:8,  Will_Score:8,  Color_Code:'Green',  PR_Score:4.5, Justification:'Agile transformation lead.',                   Frustration:2, Flight_Potential:2,   Sig_Complaining:'No', Sig_Conflict:'No', Sig_LowEnergy:'No', Sig_PerformanceDrop:'No', Sig_NoGrowthInterest:'No', Sig_UpdatedLinkedIn:'No', Sig_FrequentLeaves:'No', Sig_LessCommitment:'No', Sig_ComparingSalary:'No', Sig_HeadhuntingContact:'No' }
+];
+
+/* ============================================================
+   STATE
+   ============================================================ */
+let allData       = [];
+let nameMap       = {};   // Full_Name → Display_Name (built after data load)
+
+/* Resolve a Full_Name to its English Display_Name. Priority:
+   1. allData-derived nameMap (covers tracked employees)
+   2. CONFIG.nameOverrides (covers SLTs/senior managers not in allData)
+   3. Simple "Last, First" → "First Last" reversal (covers typical supervisors)
+   4. Original name as fallback                                              */
+function resolveDisplayName (fullName) {
+  if (!fullName || fullName === 'All') return fullName;
+  const mapped = nameMap[fullName];
+  if (mapped && mapped !== fullName) return mapped;
+  const override = CONFIG.nameOverrides && CONFIG.nameOverrides[fullName];
+  if (override) return override;
+  if (fullName.includes(',')) {
+    const comma = fullName.indexOf(',');
+    const last  = fullName.substring(0, comma).trim();
+    const first = fullName.substring(comma + 1).trim();
+    if (first) return first + ' ' + last;
+  }
+  return fullName;
+}
+let currentPeriod = CONFIG.defaultPeriod;
+let currentPlat    = 'All';
+let currentManager = 'All';
+let currentSLT     = 'All';
+let currentEmpId  = null;
+
+const SIG_COLS = [
+  { key:'Sig_Complaining',       label:'Complaining',              group:'frustration', icon:'ti-speakerphone'  },
+  { key:'Sig_Conflict',          label:'Conflict with others',     group:'frustration', icon:'ti-user-minus'    },
+  { key:'Sig_LowEnergy',         label:'Low energy / disengaged',  group:'frustration', icon:'ti-battery-2'     },
+  { key:'Sig_PerformanceDrop',   label:'Performance drop',         group:'frustration', icon:'ti-trending-down' },
+  { key:'Sig_NoGrowthInterest',  label:'No interest in growth',    group:'frustration', icon:'ti-arrow-up'      },
+  { key:'Sig_UpdatedLinkedIn',   label:'Updated LinkedIn',         group:'flight',      icon:'ti-brand-linkedin'},
+  { key:'Sig_FrequentLeaves',    label:'Frequent leaves/absences', group:'flight',      icon:'ti-calendar-x'   },
+  { key:'Sig_LessCommitment',    label:'Less commitment',          group:'flight',      icon:'ti-clock-pause'   },
+  { key:'Sig_ComparingSalary',   label:'Comparing market salary',  group:'flight',      icon:'ti-coin'          },
+  { key:'Sig_HeadhuntingContact',label:'Headhunting contact',      group:'flight',      icon:'ti-phone-call'    }
+];
+
+/* ============================================================
+   DATA LOADING
+   ============================================================ */
+async function fetchData () {
+  if (CONFIG.DEMO_MODE) {
+    allData = DEMO_DATA;
+    init();
+    return;
+  }
+  document.getElementById('demo-badge').style.display = 'none';
+  setLoading('t-sw-svg');
+  try {
+    // Determine which lists to load based on logged-in user
+    const userInfo = await getCurrentUserInfo();
+    console.log('[DEBUG] Lists to load:', userInfo.lists.map(l => l.sw));
+
+    let allSwResults = [];
+    let allFrResults = [];
+
+    for (const listPair of userInfo.lists) {
+      const swUrl = `${CONFIG.siteUrl}/_api/web/lists/getbytitle('${encodeURIComponent(listPair.sw)}')/items?$top=5000`;
+      const swResp = await fetch(swUrl, { headers:{'Accept':'application/json;odata=verbose'}, credentials:'same-origin' });
+      if (swResp.ok) {
+        const j = await swResp.json();
+        console.log(`[DEBUG] SW "${listPair.sw}": ${j.d.results.length} rows, sltName="${listPair.sltName}"`);
+        // Tag each row with which SLT list it came from
+        allSwResults = allSwResults.concat(j.d.results.map(r => Object.assign({}, r, { _sltName: listPair.sltName || '' })));
+      } else {
+        console.warn(`[DEBUG] SW "${listPair.sw}": fetch failed ${swResp.status}`);
+      }
+
+      const frUrl = `${CONFIG.siteUrl}/_api/web/lists/getbytitle('${encodeURIComponent(listPair.fr)}')/items?$top=5000`;
+      const frResp = await fetch(frUrl, { headers:{'Accept':'application/json;odata=verbose'}, credentials:'same-origin' });
+      if (frResp.ok) {
+        const j = await frResp.json();
+        console.log(`[DEBUG] FR "${listPair.fr}": ${j.d.results.length} rows`);
+        allFrResults = allFrResults.concat(j.d.results);
+      } else {
+        console.warn(`[DEBUG] FR "${listPair.fr}": fetch failed ${frResp.status}`);
+      }
+    }
+    console.log(`[DEBUG] Total SW rows: ${allSwResults.length}, FR rows: ${allFrResults.length}`);
+
+    // Wrap in the shape the rest of the code expects
+    const swJson = { d: { results: allSwResults } };
+    const frJson = { d: { results: allFrResults } };
+
+    // Build FR lookup: UKG_ID||Period → row
+    // cv() extracts .Label from SharePoint Choice objects before building the key
+    const frMap = {};
+    frJson.d.results.forEach(r => { frMap[r.UKG_ID + '||' + cv(r.Period).trim()] = r; });
+
+    // Debug: log FR structure to browser console (F12 → Console tab)
+    console.log('[FR Debug] Total FR rows:', frJson.d.results.length);
+    if (frJson.d.results.length > 0) {
+      const s = frJson.d.results[0];
+      console.log('[FR Debug] FR field names:', Object.keys(s).filter(k => !k.startsWith('odata') && !k.startsWith('__')));
+      console.log('[FR Debug] Sample frMap keys (first 5):', Object.keys(frMap).slice(0, 5));
+      console.log('[FR Debug] UKG_ID value:', s.UKG_ID, '| Period:', cv(s.Period));
+    }
+    console.log('[SW Debug] Total SW rows:', swJson.d.results.length);
+    if (swJson.d.results.length > 0) {
+      const s = swJson.d.results[0];
+      console.log('[SW Debug] SW field names:', Object.keys(s).filter(k => !k.startsWith('odata') && !k.startsWith('__')));
+      console.log('[SW Debug] First SW join key:', s.UKG_ID + '||' + cv(s.Period));
+      console.log('[SW Debug] UKG_ID value:', s.UKG_ID, '| Period raw:', s.Period, '| cv(Period):', cv(s.Period));
+    }
+    // Build fallback FR lookup by UKG_ID only (in case Period values don't match)
+    const frMapByUKG = {};
+    frJson.d.results.forEach(r => { frMapByUKG[r.UKG_ID] = r; });
+
+    // Merge SW + FR by UKG_ID + Period, normalize renamed & Choice columns
+    allData = swJson.d.results.map(sw => {
+      const swPeriodStr = cv(sw.Period).trim();
+      const fr = frMap[sw.UKG_ID + '||' + swPeriodStr] || frMapByUKG[sw.UKG_ID] || {};
+      const merged = Object.assign({}, sw, fr);
+      // Always preserve SW's Period so teamData() period filter still works
+      merged._swPeriod = swPeriodStr;
+      // Renamed columns: prefer new name, fall back to original internal name
+      merged.Full_Name     = merged.Full_Name     || merged.Title;
+      merged.Job_Title     = merged.Job_Title     || merged.Job_Title0 || merged.JobTitle || merged.Title0 || merged.Title1 || '';
+      merged.Skill_Score   = merged.Skill_Score   !== undefined ? merged.Skill_Score   : merged.Skill;
+      merged.Will_Score    = merged.Will_Score    !== undefined ? merged.Will_Score    : merged.Will;
+      merged.Justification = merged.Justification || merged.Note || merged.FR_Note;
+      // FR field name fallbacks (SharePoint may suffix fields with 0 if name conflicts)
+      merged.Frustration      = merged.Frustration      != null ? merged.Frustration      : (merged.Frustration0 != null ? merged.Frustration0 : null);
+      merged.Flight_Potential = merged.Flight_Potential != null ? merged.Flight_Potential : (merged.Flight_Potential0 != null ? merged.Flight_Potential0 : null);
+      // Normalize Choice fields ({Label,Value} → plain string)
+      // Platform, Supervisor, SLT_Name come from SW list — FR may overwrite with null, so always prefer sw.*
+      merged.Platform   = cv(sw.Platform);
+      merged.Supervisor = cv(sw.Supervisor) || cv(sw.Supervisor_Name) || merged.Supervisor || '';
+      merged.SLT_Name   = sw._sltName || '';
+      // If Period is null/empty (PA didn't map it), fall back to defaultPeriod so rows still appear
+      merged.Period     = swPeriodStr || CONFIG.defaultPeriod;
+      merged.Color_Code = cv(merged.Color_Code);
+      SIG_COLS.forEach(sc => { if (sc.key in merged) merged[sc.key] = cv(merged[sc.key]); });
+      return merged;
+    });
+
+    init();
+  } catch (err) {
+    setError('t-sw-svg', err);
+  }
+}
+
+function refreshData () { allData = []; fetchData(); }
+
+function switchTab (view, tab, idx) {
+  const prefix = view === 'team' ? 'team-view' : 'individual-view';
+  const container = document.getElementById(prefix);
+  if (!container) return;
+  // Update panels
+  container.querySelectorAll('.tab-panel').forEach((p, i) => {
+    p.style.display = i === idx ? 'block' : 'none';
+    p.classList.toggle('active', i === idx);
+  });
+  // Update buttons
+  container.querySelectorAll('.tab-btn').forEach((b, i) => {
+    b.classList.toggle('active', i === idx);
+  });
+}
+
+function init () {
+  // Force initial tab state via inline styles (overrides any SharePoint CSS conflicts)
+  document.querySelectorAll('#team-view .tab-panel').forEach((p,i) => {
+    p.style.display = i === 0 ? 'block' : 'none';
+  });
+  populateFilters();
+  renderTeamSW();
+  renderTeamFR();
+}
+
+/* ============================================================
+   FILTERS
+   ============================================================ */
+function populateFilters () {
+  // Build nameMap: Full_Name → Display_Name (for English name display in dropdowns)
+  nameMap = {};
+  allData.forEach(r => {
+    if (r.Full_Name) nameMap[r.Full_Name] = r.Display_Name || r.Full_Name;
+  });
+
+  const periods = [...new Set(allData.map(r => r.Period).filter(Boolean))]
+    .sort((a,b) => periodNum(a) - periodNum(b));
+  const pSel = document.getElementById('period-sel');
+  pSel.innerHTML = periods.map(p =>
+    `<option value="${p}" ${p === currentPeriod ? 'selected':''} >${p}</option>`
+  ).join('');
+  if (periods.length && !periods.includes(currentPeriod)) {
+    currentPeriod = periods[periods.length - 1];
+    pSel.value = currentPeriod;
+  }
+
+  // SLT dropdown — only from rows with a valid SLT_Name (excludes SLT-level employees)
+  const slts = ['All', ...[...new Set(allData.filter(isEmployee).map(r => r.SLT_Name).filter(Boolean))].sort()];
+  document.getElementById('slt-sel').innerHTML = slts.map(s =>
+    `<option value="${s}" ${s === currentSLT ? 'selected':''} >${s === 'All' ? 'All SLTs' : resolveDisplayName(s)}</option>`
+  ).join('');
+
+  // Platform dropdown — cascades by SLT
+  refreshPlatformDropdown();
+
+  // Manager dropdown — filtered by current SLT selection
+  refreshManagerDropdown();
+}
+
+// Rebuild manager dropdown based on selected SLT (call after SLT changes or on initial load)
+function refreshManagerDropdown () {
+  const slt = document.getElementById('slt-sel').value;
+  const source = (slt === 'All' ? allData : allData.filter(r => r.SLT_Name === slt)).filter(isEmployee);
+  let managers = [...new Set(source.map(r => r.Supervisor).filter(Boolean))].sort();
+  // Exclude the SLT themselves — they manage the tree, not a supervisor sub-group
+  if (slt !== 'All') managers = managers.filter(m => m !== slt);
+  managers = ['All', ...managers];
+  // If previously selected manager no longer exists in new SLT, reset to All
+  if (!managers.includes(currentManager)) currentManager = 'All';
+  document.getElementById('manager-sel').innerHTML = managers.map(m =>
+    `<option value="${m}" ${m === currentManager ? 'selected':''} >${m === 'All' ? 'All Supervisors' : resolveDisplayName(m)}</option>`
+  ).join('');
+}
+
+// Rebuild platform dropdown filtered by SLT → then by Supervisor if one is selected
+function refreshPlatformDropdown () {
+  const slt = document.getElementById('slt-sel').value;
+  const mgr = document.getElementById('manager-sel').value;
+  let source = (slt === 'All' ? allData : allData.filter(r => r.SLT_Name === slt)).filter(isEmployee);
+  if (mgr && mgr !== 'All') source = source.filter(r => r.Supervisor === mgr);
+  const plats = ['All', ...[...new Set(source.map(r => cv(r.Platform)).filter(Boolean))].sort()];
+  if (!plats.includes(currentPlat)) currentPlat = 'All';
+  document.getElementById('platform-sel').innerHTML = plats.map(p =>
+    `<option value="${p}" ${p === currentPlat ? 'selected':''} >${p === 'All' ? 'All Platforms' : p}</option>`
+  ).join('');
+}
+
+// Called when Supervisor changes: refresh platform to match, then apply filters
+function onManagerChange () {
+  currentManager = document.getElementById('manager-sel').value;
+  refreshPlatformDropdown();
+  applyFilters();
+}
+
+// Called when SLT dropdown changes: refresh manager + platform lists, then apply all filters
+function onSLTChange () {
+  currentSLT = document.getElementById('slt-sel').value;
+  refreshManagerDropdown();
+  refreshPlatformDropdown();
+  applyFilters();
+}
+
+function applyFilters () {
+  currentPeriod  = document.getElementById('period-sel').value;
+  currentPlat    = document.getElementById('platform-sel').value;
+  currentManager = document.getElementById('manager-sel').value;
+  currentSLT     = document.getElementById('slt-sel').value;
+  renderTeamSW();
+  renderTeamFR();
+  if (currentEmpId) renderIndividual(currentEmpId);
+}
+
+/* Returns true for rows that are actual employees (not SLT-level people whose own
+   SLT_Name is blank/dash because they sit at the top of the hierarchy)            */
+function isEmployee (r) {
+  const s = (r.SLT_Name || '').trim();
+  return s !== '' && s !== '-' && s !== '—' && s !== 'N/A';
+}
+
+function teamData () {
+  // Base filter: period + SLT + platform — exclude SLT-level rows (blank SLT_Name)
+  const base = allData.filter(r =>
+    isEmployee(r) &&
+    r.Period === currentPeriod &&
+    (currentSLT  === 'All' || r.SLT_Name === currentSLT) &&
+    (currentPlat === 'All' || (r.Platform || '').trim().toLowerCase() === currentPlat.trim().toLowerCase())
+  );
+
+  if (currentManager === 'All') return base;
+
+  // Hierarchical supervisor filter: include everyone in the subtree under currentManager
+  // Build supervisor → [employee names] map from base data
+  const supMap = {};
+  base.forEach(r => {
+    const sup = r.Supervisor || '';
+    if (sup) {
+      if (!supMap[sup]) supMap[sup] = [];
+      supMap[sup].push(r);
+    }
+  });
+
+  // BFS to collect all UKG_IDs in the org subtree
+  const inSubtree = new Set();
+  const queue = [currentManager];
+  const visited = new Set();
+  while (queue.length) {
+    const mgr = queue.shift();
+    if (visited.has(mgr)) continue;
+    visited.add(mgr);
+    (supMap[mgr] || []).forEach(r => {
+      inSubtree.add(r.UKG_ID);
+      // If this employee is also a supervisor (has their own reports), recurse into them
+      const empName = r.Full_Name || r.Display_Name || '';
+      if (empName && supMap[empName] && !visited.has(empName)) queue.push(empName);
+    });
+  }
+
+  return base.filter(r => inSubtree.has(r.UKG_ID));
+}
+
+function empHistory (id) {
+  return allData
+    .filter(r => r.UKG_ID === id)
+    .sort((a,b) => periodNum(a.Period) - periodNum(b.Period));
+}
+
+function periodNum (p) {
+  if (!p) return 0;
+  const m = p.match(/(H\d)\s+(\d{4})/);
+  if (!m) return 0;
+  return parseInt(m[2]) * 2 + (m[1] === 'H1' ? 0 : 1);
+}
+
+/* ============================================================
+   QUADRANT HELPERS
+   ============================================================ */
+function swQuadrant (sk, wi) {
+  const hs = parseFloat(sk) >= 5, hw = parseFloat(wi) >= 5;
+  if (hs && hw)  return 'Delegate';
+  if (hs && !hw) return 'Action Plan';
+  if (!hs && hw) return 'Train & Develop';
+  return 'Manage Out';
+}
+
+const FR_QUAD = [
+  { cond:(f,p) => f>3&&p>3, label:'Unhappy Leavers',  risk:'HIGH',     bg:'#ffebee', tc:'#c62828', fill:'#ef4444' },
+  { cond:(f,p) => f>3&&p<=3,label:'Unhappy Stayers',  risk:'MODERATE', bg:'#fff3e0', tc:'#e65100', fill:'#f59e0b' },
+  { cond:(f,p) => f<=3&&p>3, label:'Happy Leavers',   risk:'MODERATE', bg:'#fffde7', tc:'#856404', fill:'#f59e0b' },
+  { cond:()=>true,            label:'Happy Stayers',   risk:'LOW',      bg:'#e8f5e9', tc:'#2e7d32', fill:'#22c55e' }
+];
+
+function frQuad (f, p) {
+  const fv = parseFloat(f), pv = parseFloat(p);
+  return FR_QUAD.find(q => q.cond(fv, pv));
+}
+
+const CC_MAP = { Green:'#22c55e', Yellow:'#eab308', Black:'#374151', Red:'#ef4444' };
+function ccColor (code) { return CC_MAP[code] || '#94a3b8'; }
+const CC_DESC = { Green:'Growing', Yellow:'Monitor / New hire', Black:'Steady', Red:'PIP' };
+
+const SW_QUAD_STYLE = {
+  'Delegate':       { bg:'#e8f5e9', tc:'#2e7d32' },
+  'Train & Develop':{ bg:'#e3f2fd', tc:'#1565c0' },
+  'Action Plan':    { bg:'#fff8e1', tc:'#e65100' },
+  'Manage Out':     { bg:'#ffebee', tc:'#c62828' }
+};
+
+/* ============================================================
+   SVG MATRIX BUILDER
+   ============================================================ */
+function buildMatrix ({
+  W=900, H=500,
+  PAD={top:40,right:30,bottom:52,left:62},
+  xMin, xMax, xMid, xTitle,
+  yMin, yMax, yMid, yTitle,
+  quadLabels, quadFills,
+  dots, onDotClick
+}) {
+  const pw = W - PAD.left - PAD.right;
+  const ph = H - PAD.top  - PAD.bottom;
+  const xs = v => PAD.left + ((v - xMin) / (xMax - xMin)) * pw;
+  const ys = v => PAD.top  + ph - ((v - yMin) / (yMax - yMin)) * ph;
+  const mx = xs(xMid), my = ys(yMid);
+
+  // ticks
+  const xRange = xMax - xMin;
+  const yRange = yMax - yMin;
+  const xTicks = Array.from({length: xRange + 1}, (_,i) => xMin + i);
+  const yTicks = Array.from({length: yRange + 1}, (_,i) => yMin + i);
+
+  let out = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
+  <defs>
+    <filter id="glow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <clipPath id="plotClip"><rect x="${PAD.left}" y="${PAD.top}" width="${pw}" height="${ph}"/></clipPath>
+  </defs>`;
+
+  // Quadrant fills (TL, TR, BL, BR)
+  const [tlBg, trBg, blBg, brBg] = quadFills;
+  out += `
+  <rect x="${PAD.left}" y="${PAD.top}"          width="${mx-PAD.left}"       height="${my-PAD.top}"       fill="${tlBg}" opacity=".65"/>
+  <rect x="${mx}"        y="${PAD.top}"          width="${W-PAD.right-mx}"    height="${my-PAD.top}"       fill="${trBg}" opacity=".65"/>
+  <rect x="${PAD.left}" y="${my}"                width="${mx-PAD.left}"       height="${H-PAD.bottom-my}"  fill="${blBg}" opacity=".65"/>
+  <rect x="${mx}"        y="${my}"               width="${W-PAD.right-mx}"    height="${H-PAD.bottom-my}"  fill="${brBg}" opacity=".65"/>`;
+
+  // Quadrant labels (TL, TR, BL, BR)
+  const [tlQ, trQ, blQ, brQ] = quadLabels;
+  const lx = [(PAD.left+mx)/2, (mx+W-PAD.right)/2, (PAD.left+mx)/2, (mx+W-PAD.right)/2];
+  const ly = [PAD.top+20,       PAD.top+20,          H-PAD.bottom-8,  H-PAD.bottom-8];
+  [tlQ, trQ, blQ, brQ].forEach((lbl, i) => {
+    const lines = String(lbl).split('\n');
+    lines.forEach((line, li) => {
+      out += `<text x="${lx[i]}" y="${ly[i] + li*13}" text-anchor="middle"
+        font-family="'Aptos','Segoe UI',Arial,sans-serif" font-size="${li===0?12:10}" font-weight="500"
+        fill="${[tlQ,trQ,blQ,brQ][i].color}" opacity=".8">${esc(line)}</text>`;
+    });
+  });
+
+  // Grid lines
+  out += `<g clip-path="url(#plotClip)">`;
+  xTicks.forEach(v => {
+    out += `<line x1="${xs(v)}" y1="${PAD.top}" x2="${xs(v)}" y2="${H-PAD.bottom}" stroke="#c8d8e8" stroke-width=".6" opacity=".6"/>`;
+  });
+  yTicks.forEach(v => {
+    out += `<line x1="${PAD.left}" y1="${ys(v)}" x2="${W-PAD.right}" y2="${ys(v)}" stroke="#c8d8e8" stroke-width=".6" opacity=".6"/>`;
+  });
+  // Midpoint lines
+  out += `<line x1="${mx}" y1="${PAD.top}" x2="${mx}" y2="${H-PAD.bottom}" stroke="#7a9ab8" stroke-width="1.5" stroke-dasharray="5,4"/>
+          <line x1="${PAD.left}" y1="${my}" x2="${W-PAD.right}" y2="${my}" stroke="#7a9ab8" stroke-width="1.5" stroke-dasharray="5,4"/>`;
+  out += `</g>`;
+
+  // Axes
+  out += `<line x1="${PAD.left}" y1="${H-PAD.bottom}" x2="${W-PAD.right}" y2="${H-PAD.bottom}" stroke="#00112A" stroke-width="2"/>
+          <line x1="${PAD.left}" y1="${PAD.top}" x2="${PAD.left}" y2="${H-PAD.bottom}" stroke="#00112A" stroke-width="2"/>`;
+
+  // X ticks + labels
+  xTicks.forEach(v => {
+    out += `<line x1="${xs(v)}" y1="${H-PAD.bottom}" x2="${xs(v)}" y2="${H-PAD.bottom+5}" stroke="#00112A" stroke-width="1.5"/>
+            <text x="${xs(v)}" y="${H-PAD.bottom+18}" text-anchor="middle" font-family="'Aptos','Segoe UI',Arial,sans-serif" font-size="11" fill="#445566">${v}</text>`;
+  });
+  // Y ticks + labels
+  yTicks.forEach(v => {
+    out += `<line x1="${PAD.left-5}" y1="${ys(v)}" x2="${PAD.left}" y2="${ys(v)}" stroke="#00112A" stroke-width="1.5"/>
+            <text x="${PAD.left-9}" y="${ys(v)+4}" text-anchor="end" font-family="'Aptos','Segoe UI',Arial,sans-serif" font-size="11" fill="#445566">${v}</text>`;
+  });
+
+  // Axis titles
+  out += `<text x="${PAD.left+pw/2}" y="${H-4}" text-anchor="middle" font-family="'Aptos','Segoe UI',Arial,sans-serif" font-size="13" font-weight="500" fill="#00112A">${esc(xTitle)} →</text>
+          <text x="13" y="${PAD.top+ph/2}" text-anchor="middle" font-family="'Aptos','Segoe UI',Arial,sans-serif" font-size="13" font-weight="500" fill="#00112A" transform="rotate(-90,13,${PAD.top+ph/2})">${esc(yTitle)} →</text>`;
+
+  // Dots
+  dots.forEach(d => {
+    const cx = xs(d.x), cy = ys(d.y);
+    const onclick = onDotClick ? `onclick="${onDotClick}('${d.id}')"` : '';
+    const cursor  = onDotClick ? 'cursor:pointer' : '';
+    if (d.solo) {
+      // Individual view — glow dot only, no name label
+      out += `<g style="${cursor}" ${onclick}>
+        <circle cx="${cx}" cy="${cy}" r="16" fill="${d.color}" opacity=".18" filter="url(#glow)"/>
+        <circle cx="${cx}" cy="${cy}" r="10" fill="${d.color}" stroke="white" stroke-width="2.5"/>
+        <!-- Score callout -->
+        <rect x="${cx-52}" y="${cy-56}" width="104" height="30" rx="8" fill="white" stroke="${d.color}" stroke-width="1.8" opacity=".97"/>
+        <text x="${cx}" y="${cy-36}" text-anchor="middle" font-family="'Aptos','Segoe UI',Arial,sans-serif" font-size="12" font-weight="700" fill="${d.color}">${esc(d.callout)}</text>
+        <line x1="${cx}" y1="${cy-26}" x2="${cx}" y2="${cy-12}" stroke="${d.color}" stroke-width="1.5" opacity=".7"/>
+      </g>`;
+    } else {
+      // Team view — uniform dot, name colored by Color_Code
+      out += `<g style="${cursor}" ${onclick}>
+        <circle cx="${cx}" cy="${cy}" r="7" fill="#1B6FC8" stroke="white" stroke-width="1.8" opacity=".92"/>
+        <text x="${cx}" y="${cy-11}" text-anchor="middle" font-family="'Aptos','Segoe UI',Arial,sans-serif" font-size="10" font-weight="700" fill="${d.color}">${esc(d.label)}</text>
+      </g>`;
+    }
+  });
+
+  out += `</svg>`;
+  return out;
+}
+
+/* ============================================================
+   TEAM SKILL/WILL
+   ============================================================ */
+function renderTeamSW () {
+  // Debug banner
+  {
+    var _dbg = 'allData=' + allData.length + ' | currentPeriod="' + currentPeriod + '" | periods=[' + [...new Set(allData.map(function(r){return r.Period;}))].join(', ') + '] | sample=' + (allData[0] ? allData[0].UKG_ID + '/' + allData[0].Period : 'none');
+    var _el = document.getElementById('t-sw-svg');
+    if (_el) _el.innerHTML = '<div style="background:#fffbeb;border:1px solid #fbbf24;padding:12px;font-size:12px;border-radius:8px">' + _dbg + '<\/div>';
+  }
+  const data = teamData().filter(r => r.Skill_Score != null && r.Will_Score != null);
+
+  // Matrix
+  const dots = data.map(r => ({
+    x: parseFloat(r.Will_Score), y: parseFloat(r.Skill_Score),
+    color: ccColor(r.Color_Code), label: r.Display_Name || r.Full_Name,
+    id: r.UKG_ID
+  }));
+
+  // Stat boxes
+  const _swN = data.length || 1;
+  const _swAvgSk = data.length ? (data.reduce((s,r)=>s+parseFloat(r.Skill_Score||0),0)/_swN).toFixed(1) : '—';
+  const _swAvgWi = data.length ? (data.reduce((s,r)=>s+parseFloat(r.Will_Score||0),0)/_swN).toFixed(1) : '—';
+  document.getElementById('t-sw-stats').innerHTML = _statBoxHTML([['Team size',data.length],['Avg skill',_swAvgSk],['Avg will',_swAvgWi]]);
+  // Canvas height: grow only if busiest x-column (same Will_Score) needs more vertical space
+  const _swColMax = Math.max(1, ...[...new Set(data.map(r=>r.Will_Score))].map(x=>data.filter(r=>r.Will_Score===x).length));
+  const _swH = Math.max(560, _swColMax * 16 + 120);
+  document.getElementById('t-sw-svg').innerHTML = `<div style="position:relative;height:${_swH}px"><canvas id="t-sw-canvas"></canvas></div>`;
+  buildSWMatrixChart('t-sw-canvas', data);
+
+  // Quadrant breakdown — count + % only
+  const qMap = { 'Delegate':0, 'Train & Develop':0, 'Action Plan':0, 'Manage Out':0 };
+  data.forEach(r => { const q = swQuadrant(r.Skill_Score, r.Will_Score); if (q in qMap) qMap[q]++; });
+  const total = data.length || 1;
+  let qHtml = '';
+  Object.entries(qMap).forEach(([q, cnt]) => {
+    const s = SW_QUAD_STYLE[q];
+    const pct = Math.round(cnt / total * 100);
+    qHtml += `<div class="quadrant-row" style="background:${s.bg}">
+      <div class="q-label" style="color:${s.tc}">${q}</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:13px;color:${s.tc};opacity:.75">${pct}%</span>
+        <div class="q-count" style="color:${s.tc}">${cnt}</div>
+      </div>
+    </div>`;
+  });
+  document.getElementById('t-sw-quads').innerHTML = qHtml;
+
+  // Color breakdown — count + % only
+  const cMap = { Green:0, Yellow:0, Black:0, Red:0 };
+  data.forEach(r => { if (r.Color_Code && r.Color_Code in cMap) cMap[r.Color_Code]++; });
+  let cHtml = '';
+  Object.entries(cMap).forEach(([code, cnt]) => {
+    const pct = Math.round(cnt / total * 100);
+    cHtml += `<div class="color-row">
+      <div class="cc-dot" style="background:${ccColor(code)}"></div>
+      <div style="flex:1">
+        <span class="cc-name">${code}</span>
+        <span class="cc-desc"> — ${CC_DESC[code]||code}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:13px;color:#7a8fa8">${pct}%</span>
+        <div class="cc-count">${cnt}</div>
+      </div>
+    </div>`;
+  });
+  document.getElementById('t-sw-colors').innerHTML = cHtml;
+
+  // Table — join FR data for flight risk column, sort HIGH → MODERATE → LOW → alpha
+  const frLookup = {};
+  allData.forEach(r => {
+    if (r.Period === currentPeriod && r.Frustration != null && r.Flight_Potential != null) {
+      frLookup[r.UKG_ID] = frQuad(r.Frustration, r.Flight_Potential);
+    }
+  });
+  const rOrder = { HIGH: 0, MODERATE: 1, LOW: 2 };
+  const rows = [...data].sort((a, b) => {
+    const qa = frLookup[a.UKG_ID], qb = frLookup[b.UKG_ID];
+    const ra = qa ? (rOrder[qa.risk] ?? 3) : 3;
+    const rb = qb ? (rOrder[qb.risk] ?? 3) : 3;
+    return ra !== rb ? ra - rb : (a.Full_Name||'').localeCompare(b.Full_Name||'');
+  });
+  let tHtml = `<table class="data-table"><thead><tr>
+    <th>UKG ID</th><th>Full Name</th><th>Department</th><th>Job Title</th><th>Supervisor</th><th>Hire Date</th><th>Platform</th><th>PR Score</th><th>Flight Risk</th>
+  </tr></thead><tbody>`;
+  rows.forEach(r => {
+    const jobTitle = r.Job_Title || r.Title0 || r.Title1 || '';
+    const hireDate = r.Hire_Date ? (d=>{const[y,m,day]=d.split('-');return`${m}-${day}-${y}`;})(r.Hire_Date.substring(0,10)) : '—';
+    const fq = frLookup[r.UKG_ID];
+    const frCell = fq
+      ? `<span class="risk-pill-sm" style="background:${fq.bg};color:${fq.tc}">${fq.risk}</span><span style="font-size:11px;color:#667a8a;margin-left:5px">${fq.label}</span>`
+      : `<span style="color:#9ca3af;font-size:12px">—</span>`;
+    tHtml += `<tr onclick="showIndividual('${r.UKG_ID}')">
+      <td>${h(r.UKG_ID||'—')}</td>
+      <td><a class="name-link">${h(r.Full_Name||r.Display_Name)}</a></td>
+      <td>${h(r.Department||r.Dept||'—')}</td>
+      <td>${h(jobTitle)}</td>
+      <td>${h(r.Supervisor||'—')}</td>
+      <td>${hireDate}</td>
+      <td>${h(cv(r.Platform))}</td>
+      <td>${fmt2(r.PR_Score)}</td>
+      <td>${frCell}</td>
+    </tr>`;
+  });
+  tHtml += '</tbody></table>';
+  document.getElementById('t-sw-table').innerHTML = tHtml;
+}
+
+/* Collision-aware label placement for SVG dots
+   Takes array of {cx, cy, name, ...}, returns same array with lx, ly, ax added */
+function placeDotLabels (pts) {
+  const placed = [];
+  const CW = 5.5; // approx char width at font-size 10
+  // Strip HTML entities for length calc (& → 1 char, etc.)
+  function textLen(s) { return String(s).replace(/&[a-z]+;/g,'X').length * CW; }
+  function box(lx, ly, w, ax) {
+    const x1 = ax==='middle' ? lx-w/2 : ax==='start' ? lx : lx-w;
+    return {x1:x1-2, y1:ly-11, x2:x1+w+2, y2:ly+2};
+  }
+  function free(b) {
+    return !placed.some(r => b.x2>r.x1 && b.x1<r.x2 && b.y2>r.y1 && b.y1<r.y2);
+  }
+  pts.forEach(p => {
+    const w = textLen(p.name);
+    const tries = [
+      {lx:p.cx,    ly:p.cy-14, ax:'middle'},
+      {lx:p.cx,    ly:p.cy+23, ax:'middle'},
+      {lx:p.cx+11, ly:p.cy-7,  ax:'start' },
+      {lx:p.cx-11, ly:p.cy-7,  ax:'end'   },
+      {lx:p.cx,    ly:p.cy-28, ax:'middle'},
+      {lx:p.cx+11, ly:p.cy+20, ax:'start' },
+      {lx:p.cx-11, ly:p.cy+20, ax:'end'   },
+      {lx:p.cx,    ly:p.cy+36, ax:'middle'},
+      {lx:p.cx+20, ly:p.cy+5,  ax:'start' },
+      {lx:p.cx-20, ly:p.cy+5,  ax:'end'   },
+      {lx:p.cx+11, ly:p.cy-21, ax:'start' },
+      {lx:p.cx-11, ly:p.cy-21, ax:'end'   },
+    ];
+    let chosen = tries[0], found = false;
+    for (const t of tries) {
+      if (free(box(t.lx, t.ly, w, t.ax))) {
+        chosen = t; placed.push(box(t.lx, t.ly, w, t.ax)); found = true; break;
+      }
+    }
+    if (!found) placed.push(box(chosen.lx, chosen.ly, w, chosen.ax));
+    p.lx = chosen.lx; p.ly = chosen.ly; p.ax = chosen.ax;
+  });
+  return pts;
+}
+
+/* ============================================================
+   CHART.JS MATRIX HELPERS
+   ============================================================ */
+let _swChart = null, _frChart = null, _soloSWChart = null, _soloFRChart = null;
+
+function _statBoxHTML (items) {
+  return `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px">${
+    items.map(([label,val]) =>
+      `<div style="background:#f0f5fa;border-radius:8px;padding:10px 14px">
+        <div style="font-size:12px;color:#667a8a;margin-bottom:2px">${label}</div>
+        <div style="font-size:22px;font-weight:500;color:#00112A">${val}</div>
+      </div>`).join('')}</div>`;
+}
+
+function _resolveOverlaps (labels) {
+  const LH = 13;
+  for (let it = 0; it < 80; it++) {
+    let moved = false;
+    for (let i = 0; i < labels.length; i++) {
+      for (let j = i + 1; j < labels.length; j++) {
+        const a = labels[i], b = labels[j];
+        if (Math.abs(a.x - b.x) > 100) continue;
+        const dy = Math.abs(a.y - b.y);
+        if (dy < LH) {
+          const push = (LH - dy) / 2 + 0.5;
+          if (a.y <= b.y) { a.y -= push; b.y += push; } else { a.y += push; b.y -= push; }
+          moved = true;
+        }
+      }
+    }
+    if (!moved) break;
+  }
+}
+
+function _addMatrixClickHandler (canvas, getChart) {
+  if (!canvas || canvas._matrixHandlerAdded) return;
+  canvas._matrixHandlerAdded = true;
+  function getHit(e) {
+    const rect = canvas.getBoundingClientRect();
+    const cx = (e.clientX - rect.left) * (canvas.width / rect.width);
+    const cy = (e.clientY - rect.top)  * (canvas.height / rect.height);
+    const ch = getChart();
+    const areas = (ch && ch._labelHitAreas) || [];
+    return areas.find(h => cx >= h.x && cx <= h.x + h.w && cy >= h.y && cy <= h.y + h.h) || null;
+  }
+  canvas.addEventListener('click', function(e) {
+    const hit = getHit(e);
+    if (hit && hit.id) showIndividual(hit.id);
+  });
+  canvas.addEventListener('mousemove', function(e) {
+    canvas.style.cursor = getHit(e) ? 'pointer' : 'default';
+  });
+}
+
+function _makeMatrixPlugin (groups, isSW) {
+  const LBH = 20;
+  return {
+    id: 'matrixPlugin',
+    beforeDraw (ch) {
+      const { ctx, chartArea: { left, right, top, bottom }, scales: { x, y } } = ch;
+      const mx = x.getPixelForValue(5), my = y.getPixelForValue(5);
+
+      // Quadrant background fills
+      if (isSW) {
+        [[left,top,mx-left,my-top,'rgba(255,243,224,.65)'],   // top-left: Action Plan (orange)
+         [mx,top,right-mx,my-top,'rgba(232,245,233,.65)'],   // top-right: Delegate (green)
+         [left,my,mx-left,bottom-my,'rgba(255,235,238,.65)'],// bottom-left: Manage Out (red)
+         [mx,my,right-mx,bottom-my,'rgba(227,242,253,.65)']  // bottom-right: Train & Develop (blue)
+        ].forEach(([lx,ly,w,h,c]) => { ctx.fillStyle=c; ctx.fillRect(lx,ly,w,h); });
+      } else {
+        [[left,my,mx-left,bottom-my,'rgba(232,245,233,.65)'],
+         [left,top,mx-left,my-top,'rgba(255,243,224,.65)'],
+         [mx,top,right-mx,my-top,'rgba(255,235,238,.65)'],
+         [mx,my,right-mx,bottom-my,'rgba(255,253,231,.65)']
+        ].forEach(([lx,ly,w,h,c]) => { ctx.fillStyle=c; ctx.fillRect(lx,ly,w,h); });
+      }
+
+      // Dashed dividing lines
+      ctx.save();
+      ctx.setLineDash([4,4]); ctx.strokeStyle='rgba(122,154,184,.5)'; ctx.lineWidth=1.5;
+      ctx.beginPath(); ctx.moveTo(mx,top); ctx.lineTo(mx,bottom); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(left,my); ctx.lineTo(right,my); ctx.stroke();
+      ctx.restore();
+
+      // Colored label bands — top 2 pinned at very top, bottom 2 at very bottom
+      const qDefs = isSW ? [
+        { lx: left, w: mx-left,  color: '#e65100', label: 'Action Plan',     isTop: true  },
+        { lx: mx,   w: right-mx, color: '#2e7d32', label: 'Delegate',        isTop: true  },
+        { lx: left, w: mx-left,  color: '#c62828', label: 'Manage Out',      isTop: false },
+        { lx: mx,   w: right-mx, color: '#1565c0', label: 'Train & Develop', isTop: false }
+      ] : [
+        { lx: left, w: mx-left,  color: '#e65100', label: 'Unhappy Stayers — MODERATE', isTop: true  },
+        { lx: mx,   w: right-mx, color: '#c62828', label: 'Unhappy Leavers — HIGH',      isTop: true  },
+        { lx: left, w: mx-left,  color: '#2e7d32', label: 'Happy Stayers — LOW',         isTop: false },
+        { lx: mx,   w: right-mx, color: '#856804', label: 'Happy Leavers — MODERATE',    isTop: false }
+      ];
+
+      ctx.font = "500 11px 'Manrope','Segoe UI',sans-serif";
+      qDefs.forEach(({ lx, w, color, label, isTop }) => {
+        const by = isTop ? top - LBH : bottom;
+        ctx.fillStyle = color + '26';
+        ctx.fillRect(lx, by, w, LBH);
+        ctx.strokeStyle = color + '55'; ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(lx, isTop ? by + LBH : by);
+        ctx.lineTo(lx + w, isTop ? by + LBH : by);
+        ctx.stroke();
+        ctx.fillStyle = color; ctx.textAlign = 'left';
+        ctx.fillText(label, lx + 8, by + LBH - 6);
+      });
+      // Draw "0" and "10" on their respective gridlines
+      ctx.save();
+      ctx.font = "11px 'Manrope','Segoe UI',sans-serif";
+      ctx.fillStyle = '#445566'; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+      ctx.fillText('10', left - 6, top);
+      ctx.fillText('0',  left - 6, bottom);
+      ctx.restore();
+    },
+    afterDraw (ch) {
+      const { ctx, chartArea: { top, bottom, left, right }, scales: { x, y } } = ch;
+      const hitAreas = [];
+      const LH = 14; // px per name row
+
+      groups.forEach(p => {
+        const px = x.getPixelForValue(p.x), py = y.getPixelForValue(p.y);
+        const n = p.entries.length;
+
+        // Place name block: centered on dot, clamped to chart area
+        const blockH = n * LH;
+        let startY = py - blockH / 2 + LH * 0.7;
+        startY = Math.max(top + LH, Math.min(bottom - blockH + LH, startY));
+
+        // Decide label side: right by default, flip left if near right edge
+        const labelX = px + (px > right - 140 ? -(9) : 9);
+        const align   = px > right - 140 ? 'right' : 'left';
+
+        ctx.font = "11px 'Manrope','Segoe UI',sans-serif";
+        ctx.textAlign = align;
+
+        p.entries.forEach((e, i) => {
+          const ly = startY + i * LH;
+          ctx.fillStyle = e.color;
+          ctx.fillText(e.name, labelX, ly);
+          const w = ctx.measureText(e.name).width;
+          const hx = align === 'left' ? labelX - 2 : labelX - w - 2;
+          hitAreas.push({ x: hx, y: ly - 12, w: w + 4, h: 14, id: e.id });
+        });
+
+        // Draw dot — show count badge if >1 person at same coordinate
+        ctx.beginPath(); ctx.arc(px, py, 6, 0, Math.PI * 2);
+        ctx.fillStyle = '#1B6FC8'; ctx.fill();
+        ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.8; ctx.stroke();
+
+        if (n > 1) {
+          ctx.font = "bold 9px 'Manrope','Segoe UI',sans-serif";
+          ctx.fillStyle = '#fff';
+          ctx.textAlign = 'center';
+          ctx.fillText(String(n), px, py + 3.5);
+        }
+      });
+
+      ch._labelHitAreas = hitAreas;
+    }
+  };
+}
+
+function buildSWMatrixChart (canvasId, data) {
+  if (_swChart) { try { _swChart.destroy(); } catch(e){} _swChart = null; }
+  const groups = {};
+  data.forEach(r => {
+    const xv = parseFloat(r.Will_Score), yv = parseFloat(r.Skill_Score);
+    const k = `${xv}_${yv}`;
+    if (!groups[k]) groups[k] = { x: xv, y: yv, entries: [] };
+    groups[k].entries.push({ name: esc(r.Display_Name||r.Full_Name||''), color: ccColor(r.Color_Code), id: r.UKG_ID });
+  });
+  const pts = Object.values(groups);
+  const scaleOpts = (label, isY = false) => ({
+    min: 0, max: 10,
+    title: { display: true, text: label, font: { size: 13, weight: '500', family: "'Manrope','Segoe UI',sans-serif" }, color: '#00112A' },
+    ticks: { stepSize: 1, font: { size: 11, family: "'Manrope','Segoe UI',sans-serif" }, color: '#445566', callback: v => (v === 0 || (isY && v === 10)) ? '' : (Number.isInteger(v) && v >= 0 && v <= 10 ? v : '') },
+    grid: { color: 'rgba(200,216,232,.4)' }
+  });
+  _swChart = new Chart(document.getElementById(canvasId), {
+    type: 'scatter',
+    plugins: [_makeMatrixPlugin(pts, true)],
+    data: { datasets: [{ data: pts.map(p => ({ x: p.x, y: p.y })), pointRadius: 0 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      layout: { padding: { top: 36, right: 20, bottom: 36, left: 8 } },
+      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+      scales: { x: scaleOpts('WILL →'), y: scaleOpts('SKILL →', true) }
+    }
+  });
+  _addMatrixClickHandler(document.getElementById(canvasId), () => _swChart);
+}
+
+function buildFRMatrixChart (canvasId, data) {
+  if (_frChart) { try { _frChart.destroy(); } catch(e){} _frChart = null; }
+  const groups = {};
+  data.forEach(r => {
+    const xv = parseFloat(r.Flight_Potential), yv = parseFloat(r.Frustration);
+    const k = `${xv}_${yv}`;
+    if (!groups[k]) groups[k] = { x: xv, y: yv, entries: [] };
+    const q = frQuad(r.Frustration, r.Flight_Potential);
+    groups[k].entries.push({ name: esc(r.Display_Name||r.Full_Name||''), color: q.fill, id: r.UKG_ID });
+  });
+  const pts = Object.values(groups);
+  const scaleOpts = (label, isY = false) => ({
+    min: 0, max: 10,
+    title: { display: true, text: label, font: { size: 13, weight: '500', family: "'Manrope','Segoe UI',sans-serif" }, color: '#00112A' },
+    ticks: { stepSize: 1, font: { size: 11, family: "'Manrope','Segoe UI',sans-serif" }, color: '#445566', callback: v => (v === 0 || (isY && v === 10)) ? '' : (Number.isInteger(v) && v >= 0 && v <= 10 ? v : '') },
+    grid: { color: 'rgba(200,216,232,.4)' }
+  });
+  _frChart = new Chart(document.getElementById(canvasId), {
+    type: 'scatter',
+    plugins: [_makeMatrixPlugin(pts, false)],
+    data: { datasets: [{ data: pts.map(p => ({ x: p.x, y: p.y })), pointRadius: 0 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      layout: { padding: { top: 36, right: 20, bottom: 36, left: 8 } },
+      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+      scales: { x: scaleOpts('FLIGHT POTENTIAL →'), y: scaleOpts('FRUSTRATION →', true) }
+    }
+  });
+  _addMatrixClickHandler(document.getElementById(canvasId), () => _frChart);
+}
+
+/* ============================================================
+   TEAM FLIGHT RISK
+   ============================================================ */
+function renderTeamFR () {
+  const data = teamData().filter(r => r.Frustration != null && r.Flight_Potential != null);
+
+  if (data.length === 0) {
+    const total = teamData().length;
+    document.getElementById('t-fr-svg').innerHTML =
+      `<div style="padding:40px 32px;text-align:center;color:#9ca3af;font-size:13px;line-height:1.7">
+        <div style="font-size:32px;margin-bottom:12px">📋</div>
+        <strong style="display:block;margin-bottom:6px;font-size:15px;color:#6b7280">No Flight Risk data matched</strong>
+        ${total} employee(s) loaded from SW list — 0 matched to FR list.<br>
+        Open <strong>browser console</strong> (F12 → Console tab) to see<br>
+        <code style="background:#f3f4f6;padding:2px 6px;border-radius:4px;font-size:12px">[FR Debug]</code> field names and join key diagnostics.
+      </div>`;
+    document.getElementById('t-fr-quads').innerHTML = '';
+    document.getElementById('t-fr-sigs').innerHTML  = '';
+    document.getElementById('t-fr-table').innerHTML = '';
+    return;
+  }
+
+  // Stat boxes
+  const _frN = data.length || 1;
+  const _frAvgF  = (data.reduce((s,r)=>s+parseFloat(r.Frustration||0),0)/_frN).toFixed(1);
+  const _frAvgFP = (data.reduce((s,r)=>s+parseFloat(r.Flight_Potential||0),0)/_frN).toFixed(1);
+  document.getElementById('t-fr-stats').innerHTML = _statBoxHTML([['Team size',data.length],['Avg frustration',_frAvgF],['Avg flight potential',_frAvgFP]]);
+  // Canvas height: grow only if busiest x-column (same Flight_Potential) needs more vertical space
+  const _frColMax = Math.max(1, ...[...new Set(data.map(r=>r.Flight_Potential))].map(x=>data.filter(r=>r.Flight_Potential===x).length));
+  const _frH = Math.max(560, _frColMax * 16 + 120);
+  document.getElementById('t-fr-svg').innerHTML = `<div style="position:relative;height:${_frH}px"><canvas id="t-fr-canvas"></canvas></div>`;
+  buildFRMatrixChart('t-fr-canvas', data);
+
+  // Risk breakdown
+  let qHtml = '';
+  FR_QUAD.forEach(q => {
+    const names = data.filter(r => frQuad(r.Frustration,r.Flight_Potential).label === q.label)
+                      .map(r => r.Display_Name||r.Full_Name);
+    qHtml += `<div class="quadrant-row" style="background:${q.bg}">
+      <div class="q-label" style="color:${q.tc}">${q.risk} — ${q.label}</div>
+      <div class="q-count" style="color:${q.tc}">${names.length}</div>
+    </div>`;
+  });
+  document.getElementById('t-fr-quads').innerHTML = qHtml;
+
+  // Top signals bar chart
+  const sigCounts = SIG_COLS.map(s => ({
+    ...s, count: data.filter(r => r[s.key]==='Yes' || r[s.key]===true).length
+  })).sort((a,b)=>b.count-a.count).slice(0,6);
+  let sHtml = '';
+  sigCounts.forEach(s => {
+    const pct = data.length ? Math.round(s.count/data.length*100) : 0;
+    const fill = s.group === 'frustration' ? '#ef4444' : '#f59e0b';
+    sHtml += `<div class="sig-bar-row">
+      <div class="sig-bar-meta">
+        <span class="sig-bar-name">${s.label}</span>
+        <span class="sig-bar-count">${s.count} (${pct}%)</span>
+      </div>
+      <div class="sig-bar-track"><div class="sig-bar-fill" style="width:${pct}%;background:${fill}"></div></div>
+    </div>`;
+  });
+  document.getElementById('t-fr-sigs').innerHTML = sHtml || '<span style="color:#7a8fa8;font-size:13px">No signals recorded.</span>';
+
+  // Table (sorted by risk HIGH → MODERATE → LOW)
+  const rOrder = { HIGH:0, MODERATE:1, LOW:2 };
+  const rows = [...data].sort((a,b) => {
+    const qa = frQuad(a.Frustration,a.Flight_Potential), qb = frQuad(b.Frustration,b.Flight_Potential);
+    return (rOrder[qa.risk]??3) - (rOrder[qb.risk]??3) || (a.Full_Name||'').localeCompare(b.Full_Name||'');
+  });
+  const sigCountFn = r => SIG_COLS.filter(s => r[s.key]==='Yes' || r[s.key]===true).length;
+  const renderSigIcons = r => {
+    const active = SIG_COLS.filter(s => r[s.key]==='Yes' || r[s.key]===true);
+    if (!active.length) return '<span style="color:#aab">—</span>';
+    return '<div class="sig-wrap">' + active.map(s =>
+      `<span class="sig-icon ${s.group==='frustration'?'frust':'flight'}">` +
+      `<i class="ti ${s.icon}"></i>` +
+      `<span class="sig-tip">${s.label}</span></span>`
+    ).join('') + '</div>';
+  };
+  let tHtml = `<table class="data-table"><thead><tr>
+    <th>UKG ID</th><th>Full Name</th><th>Department</th><th>Job Title</th><th>Supervisor</th><th>Hire Date</th><th>Platform</th><th>Risk Level</th><th>Signals</th>
+  </tr></thead><tbody>`;
+  rows.forEach(r => {
+    const q = frQuad(r.Frustration,r.Flight_Potential);
+    const hireDate = r.Hire_Date ? (d=>{const[y,m,day]=d.split('-');return`${m}-${day}-${y}`;})(r.Hire_Date.substring(0,10)) : '—';
+    tHtml += `<tr onclick="showIndividual('${r.UKG_ID}')">
+      <td>${h(r.UKG_ID||'—')}</td>
+      <td><a class="name-link">${h(r.Full_Name||r.Display_Name)}</a></td>
+      <td>${h(r.Department||r.Dept||'—')}</td>
+      <td>${h(r.Job_Title||r.Title0||r.Title1||'')}</td>
+      <td>${h(r.Supervisor||'—')}</td>
+      <td>${hireDate}</td>
+      <td>${h(cv(r.Platform))}</td>
+      <td><span class="risk-pill-sm" style="background:${q.bg};color:${q.tc}">${q.risk}</span></td>
+      <td onclick="event.stopPropagation()">${renderSigIcons(r)}</td>
+    </tr>`;
+  });
+  tHtml += '</tbody></table>';
+  document.getElementById('t-fr-table').innerHTML = tHtml;
+}
+
+/* buildFRMatrixSVG replaced by buildFRMatrixChart above */
+
+/* ============================================================
+   INDIVIDUAL VIEW
+   ============================================================ */
+function showIndividual (ukgId) {
+  currentEmpId = ukgId;
+  const hist = empHistory(ukgId);
+  const latest = hist.find(r=>r.Period===currentPeriod) || hist[hist.length-1];
+  document.getElementById('emp-name-chip').textContent = latest ? (latest.Display_Name||latest.Full_Name||'') : '';
+  document.getElementById('emp-name-chip').classList.add('visible');
+  document.getElementById('back-btn').classList.add('visible');
+  // Swap platform dropdown → static chip
+  // Swap SLT dropdown → static chip
+  document.getElementById('slt-group').style.display = 'none';
+  const sltName = latest ? (resolveDisplayName(latest.SLT_Name) || '—') : '—';
+  document.getElementById('emp-slt-val').textContent = sltName;
+  document.getElementById('emp-slt-chip').style.display = '';
+  // Swap platform dropdown → static chip
+  document.getElementById('platform-group').style.display = 'none';
+  document.getElementById('emp-platform-val').textContent = latest && latest.Platform ? cv(latest.Platform) : '—';
+  document.getElementById('emp-platform-chip').style.display = '';
+  // Swap manager dropdown → static supervisor chip
+  document.getElementById('manager-group').style.display = 'none';
+  const supName = latest ? (resolveDisplayName(latest.Supervisor) || '—') : '—';
+  document.getElementById('emp-supervisor-val').textContent = supName;
+  document.getElementById('emp-supervisor-chip').style.display = '';
+
+  document.getElementById('team-view').style.display = 'none';
+  document.getElementById('individual-view').style.display = 'block';
+
+  // FR alert banner (no tab switching — everything is on one page now)
+  const frCur = hist.find(r=>r.Period===currentPeriod) || hist[hist.length-1];
+  const banner = document.getElementById('fr-alert-banner');
+  banner.innerHTML = '';
+  if (frCur && frCur.Frustration != null && frCur.Flight_Potential != null) {
+    const fq = frQuad(frCur.Frustration, frCur.Flight_Potential);
+    if (fq.risk === 'HIGH' || fq.risk === 'MODERATE') {
+      const cls  = fq.risk === 'HIGH' ? 'risk-high' : 'risk-moderate';
+      const icon = fq.risk === 'HIGH' ? '&#9888;' : '&#9432;';
+      const iClr = fq.risk === 'HIGH' ? '#a32d2d' : '#854f0b';
+      banner.innerHTML = `<div class="fr-alert-banner ${cls}">
+        <span class="fr-alert-icon" style="color:${iClr}">${icon}</span>
+        <div>
+          <div class="fr-alert-title">Flight risk ${fq.risk} — kỳ ${frCur.Period||currentPeriod}</div>
+          <div class="fr-alert-sub">${fq.label} &nbsp;·&nbsp; Frustration&nbsp;${frCur.Frustration} &nbsp;·&nbsp; Flight Potential&nbsp;${frCur.Flight_Potential}</div>
+        </div>
+      </div>`;
+    }
+  }
+
+  renderIndividual(ukgId);
+}
+
+function showTeamView () {
+  currentEmpId = null;
+  document.getElementById('team-view').style.display = 'block';
+  document.getElementById('individual-view').style.display = 'none';
+  document.getElementById('back-btn').classList.remove('visible');
+  // Restore SLT dropdown
+  document.getElementById('emp-slt-chip').style.display = 'none';
+  document.getElementById('slt-group').style.display = '';
+  // Restore platform dropdown
+  document.getElementById('emp-platform-chip').style.display = 'none';
+  document.getElementById('platform-group').style.display = '';
+  // Restore manager dropdown
+  document.getElementById('emp-supervisor-chip').style.display = 'none';
+  document.getElementById('manager-group').style.display = '';
+  document.getElementById('emp-name-chip').classList.remove('visible');
+  // Clear FR alert
+  document.getElementById('fr-alert-banner').innerHTML = '';
+}
+
+function renderIndividual (id) {
+  renderEmpSW(id);
+  renderEmpFR(id);
+  renderMergedHistory(id);
+  // Let the 2-col grid settle then resize charts so they fill the half-width column
+  requestAnimationFrame(() => {
+    if (_soloSWChart) _soloSWChart.resize();
+    if (_soloFRChart) _soloFRChart.resize();
+  });
+}
+
+/* ── Merged History Table (SW + FR in one row per period) ──── */
+function renderMergedHistory (id) {
+  const hist = empHistory(id);
+  const el = document.getElementById('e-merged-history');
+  if (!el) return;
+  if (!hist || !hist.length) { el.innerHTML = ''; return; }
+
+  const dChip = function(d, invert) {
+    if (d === null || isNaN(d)) return '<span style="color:#9ca3af;font-size:11px">—</span>';
+    const eff = invert ? -d : d;
+    if (eff > 0) return '<span style="display:inline-flex;align-items:center;background:#dcfce7;color:#15803d;border-radius:999px;padding:2px 7px;font-size:11px;font-weight:600;margin-left:5px">▲+' + Math.abs(d) + '</span>';
+    if (eff < 0) return '<span style="display:inline-flex;align-items:center;background:#fee2e2;color:#dc2626;border-radius:999px;padding:2px 7px;font-size:11px;font-weight:600;margin-left:5px">▼' + d + '</span>';
+    return '<span style="display:inline-flex;align-items:center;background:#f3f4f6;color:#6b7280;border-radius:999px;padding:2px 7px;font-size:11px;font-weight:500;margin-left:5px">—0</span>';
+  };
+
+  let tHtml = `<table class="data-table"><thead><tr>
+    <th>Period</th>
+    <th style="color:#1B6FC8">Skill</th>
+    <th style="color:#1B6FC8">Will</th>
+    <th style="color:#1B6FC8">PR Score</th>
+    <th style="color:#1B6FC8">Quadrant</th>
+    <th style="color:#1B6FC8">Color</th>
+    <th style="color:#b45309">Frustration</th>
+    <th style="color:#b45309">Flight Potential</th>
+    <th style="color:#b45309">Risk Level</th>
+    <th>Justification</th>
+  </tr></thead><tbody>`;
+
+  hist.forEach(function(r, i) {
+    const p     = i > 0 ? hist[i-1] : null;
+    const ds    = p && r.Skill_Score  != null && p.Skill_Score  != null ? +r.Skill_Score  - +p.Skill_Score  : null;
+    const dw    = p && r.Will_Score   != null && p.Will_Score   != null ? +r.Will_Score   - +p.Will_Score   : null;
+    const df    = p && r.Frustration  != null && p.Frustration  != null ? +r.Frustration  - +p.Frustration  : null;
+    const dp    = p && r.Flight_Potential != null && p.Flight_Potential != null ? +r.Flight_Potential - +p.Flight_Potential : null;
+    const isCur = r.Period === currentPeriod;
+    const rq    = (r.Frustration != null && r.Flight_Potential != null) ? frQuad(r.Frustration, r.Flight_Potential) : null;
+
+    const skVal = r.Skill_Score        != null ? r.Skill_Score        : '—';
+    const wiVal = r.Will_Score         != null ? r.Will_Score         : '—';
+    const frVal = r.Frustration        != null ? r.Frustration        : '—';
+    const fpVal = r.Flight_Potential   != null ? r.Flight_Potential   : '—';
+
+    tHtml += '<tr style="' + (isCur ? 'background:#f0f7ff' : '') + '">'
+      + '<td>' + h(r.Period||'') + (isCur ? '<span class="period-current">CURRENT</span>' : '') + '</td>'
+      + '<td style="background:' + (isCur?'#e8f4fd20':'') + '"><strong>' + skVal + '</strong>' + dChip(ds, false) + '</td>'
+      + '<td style="background:' + (isCur?'#e8f4fd20':'') + '"><strong>' + wiVal + '</strong>' + dChip(dw, false) + '</td>'
+      + '<td style="background:' + (isCur?'#e8f4fd20':'') + '">' + fmt2(r.PR_Score) + '</td>'
+      + '<td style="background:' + (isCur?'#e8f4fd20':'') + '">' + (r.Skill_Score!=null&&r.Will_Score!=null ? swQuadrant(r.Skill_Score,r.Will_Score) : '—') + '</td>'
+      + '<td style="background:' + (isCur?'#e8f4fd20':'') + '"><span class="cc-dot" style="background:' + ccColor(r.Color_Code) + ';display:inline-block;margin-right:4px;vertical-align:middle"></span>' + (r.Color_Code||'—') + '</td>'
+      + '<td style="background:' + (isCur?'#fef3e220':'') + '"><strong>' + frVal + '</strong>' + dChip(df, true) + '</td>'
+      + '<td style="background:' + (isCur?'#fef3e220':'') + '"><strong>' + fpVal + '</strong>' + dChip(dp, true) + '</td>'
+      + '<td style="background:' + (isCur?'#fef3e220':'') + '">' + (rq ? '<span class="risk-pill-sm" style="background:' + rq.bg + ';color:' + rq.tc + '">' + rq.risk + '</span>' : '—') + '</td>'
+      + '<td style="max-width:220px;white-space:pre-wrap;font-size:12px">' + h(r.Justification||'') + '</td>'
+      + '</tr>';
+  });
+
+  tHtml += '</tbody></table>';
+  el.innerHTML = tHtml;
+}
+
+function mgrNoteHtml (r) {
+  if (!r || !r.Justification) return '';
+  return `<div class="mgr-note">
+    <span class="mgr-note-icon"><i class="ti ti-notes"></i></span>
+    <div>
+      <div class="mgr-note-meta">Manager's Note — ${h(r.Period||'')}</div>
+      <div class="mgr-note-text">${h(r.Justification)}</div>
+    </div>
+  </div>`;
+}
+
+/* ── Individual Skill/Will ─────────────────────────────────── */
+function renderEmpSW (id) {
+  const hist    = empHistory(id);
+  const current = hist.find(r=>r.Period===currentPeriod) || hist[hist.length-1];
+  const prevIdx = current ? hist.indexOf(current)-1 : -1;
+  const prev    = prevIdx>=0 ? hist[prevIdx] : null;
+
+  if (!current) {
+    document.getElementById('e-sw-scores').innerHTML = noData();
+    document.getElementById('e-sw-svg').innerHTML = '';
+    return;
+  }
+
+  // Score cards
+  const dSk = prev ? +current.Skill_Score - +prev.Skill_Score : null;
+  const dWi = prev ? +current.Will_Score  - +prev.Will_Score  : null;
+  const dPR = prev ? +current.PR_Score - +prev.PR_Score : null;
+  document.getElementById('e-sw-scores').innerHTML =
+    `<div class="score-cards-row">` +
+    scoreCard('SKILL', current.Skill_Score, 10, dSk) +
+    scoreCard('WILL',  current.Will_Score,  10, dWi) +
+    scoreCard('PR SCORE', current.PR_Score, 5, dPR, true) +
+    `</div>`;
+
+  // Trend chart
+  buildEmpTrendChart('e-sw-trend', hist,
+    ['Skill_Score','Will_Score'], ['Skill','Will'],
+    ['#1B6FC8','#22c55e'], 10);
+
+  // Solo matrix
+  const sk=parseFloat(current.Skill_Score), wi=parseFloat(current.Will_Score);
+  const color=ccColor(current.Color_Code);
+  const callout=`Skill ${sk} · Will ${wi}`;
+  document.getElementById('e-sw-svg').innerHTML = '<div style="position:relative;height:420px"><canvas id="e-sw-canvas"></canvas></div>';
+  buildSoloSWChart('e-sw-canvas', sk, wi, color, callout);
+
+  // Manager's Note
+  document.getElementById('e-sw-note').innerHTML = mgrNoteHtml(current);
+  // History is rendered in merged table at the bottom by renderMergedHistory()
+}
+
+/* ── Individual Trend Chart ───────────────────────────────── */
+const _empTrendCharts = {};
+function buildEmpTrendChart (containerId, hist, fields, labels, colors, yMax) {
+  if (_empTrendCharts[containerId]) { try { _empTrendCharts[containerId].destroy(); } catch(e){} delete _empTrendCharts[containerId]; }
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  if (!hist || hist.length < 2) { el.innerHTML = ''; return; }
+  el.innerHTML = '<div style="position:relative;height:180px"><canvas id="' + containerId + '-c"></canvas></div>';
+  const datasets = fields.map((f, i) => ({
+    label: labels[i],
+    data: hist.map(r => r[f] != null ? parseFloat(r[f]) : null),
+    borderColor: colors[i], backgroundColor: colors[i] + '12',
+    borderWidth: 2.5, pointRadius: 5,
+    pointBackgroundColor: colors[i], pointBorderColor: '#fff', pointBorderWidth: 2,
+    tension: 0.35, fill: true
+  }));
+  const scOpts = { min: 0, max: yMax,
+    ticks: { stepSize: yMax === 10 ? 2 : 1, font: { size: 11, family: "'Manrope','Segoe UI',sans-serif" }, color: '#667a8a' },
+    grid: { color: 'rgba(200,216,232,.35)' }
+  };
+  _empTrendCharts[containerId] = new Chart(document.getElementById(containerId + '-c'), {
+    type: 'line',
+    data: { labels: hist.map(r => r.Period), datasets },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      layout: { padding: { top: 8, right: 12, bottom: 4, left: 4 } },
+      plugins: {
+        legend: { display: true, position: 'top', align: 'end',
+          labels: { font: { size: 11, family: "'Manrope','Segoe UI',sans-serif" }, color: '#445566', usePointStyle: true, pointStyleWidth: 10, boxHeight: 6 }
+        },
+        tooltip: {
+          backgroundColor: '#fff', borderColor: 'rgba(0,17,42,.12)', borderWidth: 1,
+          titleColor: '#00112A', bodyColor: '#445566',
+          titleFont: { size: 11, family: "'Manrope','Segoe UI',sans-serif" },
+          bodyFont: { size: 12, weight: '500', family: "'Manrope','Segoe UI',sans-serif" },
+          padding: 10, displayColors: true
+        }
+      },
+      scales: {
+        x: { ticks: { font: { size: 11, family: "'Manrope','Segoe UI',sans-serif" }, color: '#667a8a' }, grid: { color: 'rgba(200,216,232,.25)' } },
+        y: scOpts
+      }
+    }
+  });
+}
+
+function _makeSoloPlugin (xVal, yVal, color, callout, isSW) {
+  const LBH = 20;
+  return {
+    id: 'soloMatrixPlugin',
+    beforeDraw (ch) {
+      const { ctx, chartArea: { left, right, top, bottom }, scales: { x, y } } = ch;
+      const mx = x.getPixelForValue(5), my = y.getPixelForValue(5);
+      // Quadrant fills
+      if (isSW) {
+        [[left,top,mx-left,my-top,'rgba(255,243,224,.65)'],
+         [mx,top,right-mx,my-top,'rgba(232,245,233,.65)'],
+         [left,my,mx-left,bottom-my,'rgba(255,235,238,.65)'],
+         [mx,my,right-mx,bottom-my,'rgba(227,242,253,.65)']
+        ].forEach(([lx,ly,w,h,c]) => { ctx.fillStyle=c; ctx.fillRect(lx,ly,w,h); });
+      } else {
+        [[left,my,mx-left,bottom-my,'rgba(232,245,233,.65)'],
+         [left,top,mx-left,my-top,'rgba(255,243,224,.65)'],
+         [mx,top,right-mx,my-top,'rgba(255,235,238,.65)'],
+         [mx,my,right-mx,bottom-my,'rgba(255,253,231,.65)']
+        ].forEach(([lx,ly,w,h,c]) => { ctx.fillStyle=c; ctx.fillRect(lx,ly,w,h); });
+      }
+      // Dashed dividing lines
+      ctx.save();
+      ctx.setLineDash([4,4]); ctx.strokeStyle='rgba(122,154,184,.5)'; ctx.lineWidth=1.5;
+      ctx.beginPath(); ctx.moveTo(mx,top); ctx.lineTo(mx,bottom); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(left,my); ctx.lineTo(right,my); ctx.stroke();
+      ctx.restore();
+      // Colored label bands
+      const qDefs = isSW ? [
+        { lx:left, w:mx-left,  color:'#e65100', label:'Action Plan',     isTop:true  },
+        { lx:mx,   w:right-mx, color:'#2e7d32', label:'Delegate',        isTop:true  },
+        { lx:left, w:mx-left,  color:'#c62828', label:'Manage Out',      isTop:false },
+        { lx:mx,   w:right-mx, color:'#1565c0', label:'Train & Develop', isTop:false }
+      ] : [
+        { lx:left, w:mx-left,  color:'#e65100', label:'Unhappy Stayers — MODERATE', isTop:true  },
+        { lx:mx,   w:right-mx, color:'#c62828', label:'Unhappy Leavers — HIGH',      isTop:true  },
+        { lx:left, w:mx-left,  color:'#2e7d32', label:'Happy Stayers — LOW',         isTop:false },
+        { lx:mx,   w:right-mx, color:'#856804', label:'Happy Leavers — MODERATE',    isTop:false }
+      ];
+      ctx.font = "500 11px 'Manrope','Segoe UI',sans-serif";
+      qDefs.forEach(({ lx, w, color: c, label, isTop }) => {
+        const by = isTop ? top - LBH : bottom;
+        ctx.fillStyle = c + '26'; ctx.fillRect(lx, by, w, LBH);
+        ctx.strokeStyle = c + '55'; ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(lx, isTop ? by + LBH : by);
+        ctx.lineTo(lx + w, isTop ? by + LBH : by);
+        ctx.stroke();
+        ctx.fillStyle = c; ctx.textAlign = 'left';
+        ctx.fillText(label, lx + 8, by + LBH - 6);
+      });
+      // Draw "0" and "10" on their respective gridlines
+      ctx.save();
+      ctx.font = "11px 'Manrope','Segoe UI',sans-serif";
+      ctx.fillStyle = '#445566'; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+      ctx.fillText('10', left - 6, top);
+      ctx.fillText('0',  left - 6, bottom);
+      ctx.restore();
+    },
+    afterDraw (ch) {
+      const { ctx, scales: { x, y }, chartArea: { top, bottom, left, right } } = ch;
+      const LBH = 20;
+      const px = x.getPixelForValue(xVal), py = y.getPixelForValue(yVal);
+      // Clamp dot inside label bands
+      const dotY = Math.max(top + LBH + 14, Math.min(bottom - LBH - 14, py));
+      const dotX = Math.max(left + 14, Math.min(right - 14, px));
+      // Callout box dimensions
+      const text = callout || '';
+      ctx.font = "600 12px 'Manrope','Segoe UI',sans-serif";
+      const tw = ctx.measureText(text).width;
+      const bw = tw + 24, bh = 28, br = 8;
+      // Place above dot by default; flip BELOW if not enough space above
+      const CONNECTOR = 14, GLOW = 20;
+      const spaceAbove = dotY - (top + LBH + 4);
+      const placeBelow = spaceAbove < (bh + CONNECTOR + GLOW);
+      let bx = dotX - bw / 2;
+      let by = placeBelow
+        ? Math.min(dotY + GLOW + CONNECTOR, bottom - LBH - bh - 4)
+        : Math.max(top + LBH + 4, dotY - GLOW - CONNECTOR - bh);
+      bx = Math.max(left + 4, Math.min(right - bw - 4, bx));
+      function rrect(cx2, cy2, cw, ch2, cr) {
+        ctx.beginPath();
+        ctx.moveTo(cx2+cr, cy2);
+        ctx.lineTo(cx2+cw-cr, cy2); ctx.arcTo(cx2+cw, cy2, cx2+cw, cy2+cr, cr);
+        ctx.lineTo(cx2+cw, cy2+ch2-cr); ctx.arcTo(cx2+cw, cy2+ch2, cx2+cw-cr, cy2+ch2, cr);
+        ctx.lineTo(cx2+cr, cy2+ch2); ctx.arcTo(cx2, cy2+ch2, cx2, cy2+ch2-cr, cr);
+        ctx.lineTo(cx2, cy2+cr); ctx.arcTo(cx2, cy2, cx2+cr, cy2, cr);
+        ctx.closePath();
+      }
+      // Shadow
+      ctx.save();
+      ctx.shadowColor = 'rgba(0,0,0,.12)'; ctx.shadowBlur = 8; ctx.shadowOffsetY = 2;
+      ctx.fillStyle = '#fff';
+      rrect(bx, by, bw, bh, br);
+      ctx.fill();
+      ctx.restore();
+      // Box border
+      ctx.strokeStyle = color + 'cc'; ctx.lineWidth = 1.8;
+      rrect(bx, by, bw, bh, br); ctx.stroke();
+      // Box text
+      ctx.fillStyle = color; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(text, bx + bw / 2, by + bh / 2);
+      // Connector line — direction matches placement
+      ctx.strokeStyle = color + 'aa'; ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      if (placeBelow) {
+        ctx.moveTo(dotX, by); ctx.lineTo(dotX, dotY + GLOW);
+      } else {
+        ctx.moveTo(dotX, by + bh); ctx.lineTo(dotX, dotY - GLOW);
+      }
+      ctx.stroke();
+      // Glow ring
+      ctx.beginPath(); ctx.arc(dotX, dotY, 18, 0, Math.PI * 2);
+      ctx.fillStyle = color + '26'; ctx.fill();
+      // Dot
+      ctx.beginPath(); ctx.arc(dotX, dotY, 10, 0, Math.PI * 2);
+      ctx.fillStyle = color; ctx.shadowColor = color + '55'; ctx.shadowBlur = 10;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+      ctx.strokeStyle = '#fff'; ctx.lineWidth = 2.5; ctx.stroke();
+      ctx.textBaseline = 'alphabetic';
+    }
+  };
+}
+
+function buildSoloSWChart (canvasId, sk, wi, color, callout) {
+  if (_soloSWChart) { try { _soloSWChart.destroy(); } catch(e){} _soloSWChart = null; }
+  const scaleOpts = (label, isY = false) => ({
+    min: 0, max: 10,
+    title: { display: true, text: label, font: { size: 13, weight: '500', family: "'Manrope','Segoe UI',sans-serif" }, color: '#00112A' },
+    ticks: { stepSize: 1, font: { size: 11, family: "'Manrope','Segoe UI',sans-serif" }, color: '#445566', callback: v => (v === 0 || (isY && v === 10)) ? '' : (Number.isInteger(v) && v >= 0 && v <= 10 ? v : '') },
+    grid: { color: 'rgba(200,216,232,.4)' }
+  });
+  _soloSWChart = new Chart(document.getElementById(canvasId), {
+    type: 'scatter',
+    plugins: [_makeSoloPlugin(wi, sk, color, callout, true)],
+    data: { datasets: [{ data: [{ x: wi, y: sk }], pointRadius: 0 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      layout: { padding: { top: 36, right: 20, bottom: 36, left: 8 } },
+      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+      scales: { x: scaleOpts('WILL →'), y: scaleOpts('SKILL →', true) }
+    }
+  });
+}
+
+/* ── Individual Flight Risk ────────────────────────────────── */
+function renderEmpFR (id) {
+  const hist    = empHistory(id);
+  const current = hist.find(r=>r.Period===currentPeriod) || hist[hist.length-1];
+  const prevIdx = current ? hist.indexOf(current)-1 : -1;
+  const prev    = prevIdx>=0 ? hist[prevIdx] : null;
+
+  if (!current) {
+    document.getElementById('e-fr-scores').innerHTML = noData();
+    return;
+  }
+
+  const q  = frQuad(current.Frustration, current.Flight_Potential);
+  const dF = prev ? +current.Frustration     - +prev.Frustration     : null;
+  const dP = prev ? +current.Flight_Potential - +prev.Flight_Potential : null;
+
+  // Score cards — for FR, higher is worse so invert delta color
+  document.getElementById('e-fr-scores').innerHTML =
+    `<div class="score-cards-row">` +
+    scoreCard('FRUSTRATION',     current.Frustration,     6, dF, false, true) +
+    scoreCard('FLIGHT POTENTIAL',current.Flight_Potential,6, dP, false, true) +
+    `<div class="score-card risk-card">
+       <div class="sc-label">RISK LEVEL</div>
+       <div class="sc-risk-label">${q.label}</div>
+       <span class="risk-pill rp-${q.risk.toLowerCase()}">${q.risk}</span>
+     </div></div>`;
+
+  // Trend chart
+  buildEmpTrendChart('e-fr-trend', hist,
+    ['Frustration','Flight_Potential'], ['Frustration','Flight Potential'],
+    ['#ef4444','#f59e0b'], 6);
+
+  // Solo FR matrix
+  const fv=parseFloat(current.Frustration), pv=parseFloat(current.Flight_Potential);
+  document.getElementById('e-fr-svg').innerHTML = '<div style="position:relative;height:420px"><canvas id="e-fr-canvas"></canvas></div>';
+  buildSoloFRChart('e-fr-canvas', fv, pv, q.fill, `Frust ${fv} · FP ${pv}`);
+
+  // Update period label in section header
+  const periodLbl = document.getElementById('e-fr-period-label');
+  if (periodLbl) periodLbl.textContent = current.Period || currentPeriod;
+
+  // Behavioral signals — Option A: 2 separate colored cards
+  const groups = [
+    { title:'Frustration Signals', keys: SIG_COLS.filter(s=>s.group==='frustration'),
+      cardBg:'#fff1f2', border:'#fca5a5', labelBg:'#fee2e2', labelColor:'#b91c1c' },
+    { title:'Flight Signals',      keys: SIG_COLS.filter(s=>s.group==='flight'),
+      cardBg:'#fffbeb', border:'#fcd34d', labelBg:'#fef3c7', labelColor:'#92400e' }
+  ];
+  let sigHtml = '<div class="signals-grid">';
+  groups.forEach(g => {
+    sigHtml += `<div style="background:${g.cardBg};border:1px solid ${g.border};border-radius:8px;overflow:hidden">
+      <div style="background:${g.labelBg};color:${g.labelColor};font-size:12px;font-weight:700;padding:7px 12px;letter-spacing:.03em;text-transform:uppercase">${g.title}</div>
+      <div style="padding:10px 12px">`;
+    g.keys.forEach(s => {
+      const sigVal = current[s.key];
+      const yes = sigVal === 'Yes' || sigVal === true;
+      const unk = sigVal === 'Unknown' || sigVal == null;
+      sigHtml += `<div class="signal-item">
+        <div class="sig-icon ${yes?'sig-yes':unk?'sig-unknown':'sig-no'}">${yes?'✓':unk?'?':'—'}</div>
+        <span class="${yes?'sig-yes-text':unk?'sig-unknown-text':''}">${s.label}</span>
+      </div>`;
+    });
+    sigHtml += `</div></div>`;
+  });
+  sigHtml += '</div>';
+  document.getElementById('e-fr-signals').innerHTML = sigHtml;
+
+  // Manager's Note
+  document.getElementById('e-fr-note').innerHTML = mgrNoteHtml(current);
+  // History is rendered in merged table at the bottom by renderMergedHistory()
+}
+
+function buildSoloFRChart (canvasId, fv, pv, color, callout) {
+  if (_soloFRChart) { try { _soloFRChart.destroy(); } catch(e){} _soloFRChart = null; }
+  const scaleOpts = (label, isY = false) => ({
+    min: 0, max: 10,
+    title: { display: true, text: label, font: { size: 13, weight: '500', family: "'Manrope','Segoe UI',sans-serif" }, color: '#00112A' },
+    ticks: { stepSize: 1, font: { size: 11, family: "'Manrope','Segoe UI',sans-serif" }, color: '#445566', callback: v => (v === 0 || (isY && v === 10)) ? '' : (Number.isInteger(v) && v >= 0 && v <= 10 ? v : '') },
+    grid: { color: 'rgba(200,216,232,.4)' }
+  });
+  _soloFRChart = new Chart(document.getElementById(canvasId), {
+    type: 'scatter',
+    plugins: [_makeSoloPlugin(pv, fv, color, callout, false)],
+    data: { datasets: [{ data: [{ x: pv, y: fv }], pointRadius: 0 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      layout: { padding: { top: 36, right: 20, bottom: 36, left: 8 } },
+      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+      scales: { x: scaleOpts('FLIGHT POTENTIAL →'), y: scaleOpts('FRUSTRATION →', true) }
+    }
+  });
+}
+
+/* ============================================================
+   UI HELPERS
+   ============================================================ */
+function switchTab (ctx, tab, idx) {
+  const view = ctx === 'team' ? 'team-view' : 'individual-view';
+  const btns  = document.querySelectorAll(`#${view} .tab-btn`);
+  const panels= document.querySelectorAll(`#${view} .tab-panel`);
+  btns.forEach((b,i)  => b.classList.toggle('active', i===idx));
+  // Use inline style to override any SharePoint CSS conflicts
+  panels.forEach((p,i)=> { p.style.display = (i===idx) ? 'block' : 'none'; });
+}
+
+function scoreCard (label, val, max, delta, decimals=false, invertDelta=false) {
+  const num = parseFloat(val);
+  const pct = max > 0 ? Math.min(100, Math.round(num/max*100)) : 0;
+  const display = val != null ? (decimals ? parseFloat(val).toFixed(1) : val) : '—';
+  let chip = '';
+  if (delta !== null && !isNaN(delta)) {
+    const eff = invertDelta ? -delta : delta;
+    if      (eff > 0) chip = `<span class="delta-chip d-up">▲ +${Math.abs(delta).toFixed(1)}</span>`;
+    else if (eff < 0) chip = `<span class="delta-chip d-down">▼ −${Math.abs(delta).toFixed(1)}</span>`;
+    else chip = `<span class="delta-chip d-zero">— 0</span>`;
+  }
+  return `<div class="score-card">
+    <div class="sc-label">${label}</div>
+    <div class="sc-value">${display}<span class="sc-max"> / ${max}</span></div>
+    <div class="gauge-bar"><div class="gauge-fill" style="width:${pct}%"></div></div>
+    ${chip}
+  </div>`;
+}
+
+function dCls (d, invert=false) {
+  if (d===null) return 'd-zer';
+  const eff = invert ? -d : d;
+  return eff>0 ? 'd-pos' : eff<0 ? 'd-neg' : 'd-zer';
+}
+function dStr (d) {
+  if (d===null) return '—';
+  return d>0 ? `+${d}` : `${d}`;
+}
+
+function setLoading (id) {
+  const el = document.getElementById(id);
+  if (el) el.innerHTML = `<div class="loading-state"><div class="spinner"></div>Loading data from SharePoint…</div>`;
+}
+function setError (id, err) {
+  const el = document.getElementById(id);
+  if (el) el.innerHTML = `<div class="error-state">
+    <strong>Could not load data.</strong> ${err.message||err}<br><br>
+    <strong>Check:</strong>
+    <ul style="margin:8px 0 0 16px;line-height:1.8">
+      <li><code>CONFIG.siteUrl</code> — must be your SharePoint site URL</li>
+      <li><code>CONFIG.swListName</code> and <code>CONFIG.frListName</code> — must match exact list names</li>
+      <li>This page must be hosted on the same SharePoint site (same-origin auth)</li>
+      <li>Set <code>DEMO_MODE: true</code> to preview without SharePoint</li>
+    </ul>
+  </div>`;
+}
+function noData () {
+  return `<div style="color:#7a8fa8;padding:24px;font-size:13px">No data for this employee in the selected period.</div>`;
+}
+function h  (str) { return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function esc(str) { return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+// SharePoint Choice/Lookup fields may return objects — extract the text value
+function cv(v) {
+  if (v == null) return '';
+  if (typeof v !== 'object') return String(v);
+  if (v.Label  != null) return String(v.Label);   // Choice single: {Label, Value}
+  if (v.Value  != null) return String(v.Value);   // Lookup: {Id, Value}
+  if (Array.isArray(v)) return v.map(cv).join(', ');
+  if (v.results != null) return Array.isArray(v.results) ? v.results.map(cv).join(', ') : String(v.results);
+  return '';
+}
+// Format number to fixed 2 decimal places
+function fmt2(v) { const n = parseFloat(v); return isNaN(n) ? '—' : n.toFixed(2); }
+
+/* ============================================================
+   BOOT
+   ============================================================ */
+document.addEventListener('DOMContentLoaded', fetchData);
+</script>
+</body>
+</html>
+                           
