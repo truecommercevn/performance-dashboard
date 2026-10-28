@@ -850,8 +850,9 @@ select:focus { border-color: var(--tc-brand); }
     <select id="period-sel" onchange="applyFilters()"></select>
   </div>
 
-  <div class="ml-auto">
-    <button type="button" class="btn-ghost" onclick="refreshData()">↻ Refresh</button>
+  <div class="ml-auto" style="display:flex;gap:8px;align-items:center">
+    <button type="button" class="btn-ghost" onclick="refreshData()">↻ Refresh data</button>
+    <button type="button" class="btn-ghost" id="fs-btn" onclick="toggleFullscreen()"><i class="ti ti-arrows-maximize" aria-hidden="true"></i> Full screen</button>
   </div>
 </div>
 
@@ -1252,6 +1253,22 @@ async function fetchData () {
 }
 
 function refreshData () { allData = []; fetchData(); }
+
+function toggleFullscreen () {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen();
+  } else {
+    document.exitFullscreen();
+  }
+}
+document.addEventListener('fullscreenchange', function () {
+  const btn = document.getElementById('fs-btn');
+  if (document.fullscreenElement) {
+    btn.innerHTML = '<i class="ti ti-arrows-minimize" aria-hidden="true"></i> Exit full screen';
+  } else {
+    btn.innerHTML = '<i class="ti ti-arrows-maximize" aria-hidden="true"></i> Full screen';
+  }
+});
 
 function switchTab (view, tab, idx) {
   const prefix = view === 'team' ? 'team-view' : 'individual-view';
