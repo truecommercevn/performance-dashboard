@@ -76,12 +76,9 @@ def get_site_id(token):
 def list_folder_files(token, site_id, folder_path):
     """Return list of Excel file items in the folder."""
     encoded = requests.utils.quote(folder_path)
-    url = (
-        f"{GRAPH}/sites/{site_id}/drive/root:/{encoded}:/children"
-        f"?$select=id,name,parentReference&$filter=endswith(name,'.xlsx')"
-    )
+    url = f"{GRAPH}/sites/{site_id}/drive/root:/{encoded}:/children?$select=id,name,parentReference"
     data = gget(url, token)
-    return data.get("value", [])
+    return [f for f in data.get("value", []) if f["name"].lower().endswith(".xlsx")]
 
 
 def list_worksheets(token, site_id, item_id):
