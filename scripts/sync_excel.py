@@ -29,7 +29,7 @@ from pathlib import Path
 # ─── CONFIG ────────────────────────────────────────────────────────────────
 SP_HOSTNAME  = "tcapc.sharepoint.com"
 SP_SITE_PATH = "/sites/performance"
-FOLDER_PATH  = "Shared Documents/Skill Will"   # under default drive root
+FOLDER_PATH  = "Performance Dashboard/Skill Will"   # under default drive root
 
 GRAPH = "https://graph.microsoft.com/v1.0"
 
