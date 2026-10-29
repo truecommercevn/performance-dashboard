@@ -1181,18 +1181,36 @@ function getMsal () {
   return _msalInstance;
 }
 
-/* ── Get Graph API access token (silent first, popup fallback) ──────── */
+/* ── Get Graph API access token (SSO silent → popup fallback) ───────── */
 async function getGraphToken () {
   const msalInst = getMsal();
   await msalInst.initialize();
+  // Handle redirect response if returning from login redirect
+  await msalInst.handleRedirectPromise();
+
   const accounts = msalInst.getAllAccounts();
-  const request  = { scopes: CONFIG.graph.scopes, account: accounts[0] };
+  const request  = { scopes: CONFIG.graph.scopes };
+
+  // 1. Try silent with cached account
+  if (accounts.length > 0) {
+    try {
+      const result = await msalInst.acquireTokenSilent({ ...request, account: accounts[0] });
+      return result.accessToken;
+    } catch { /* fall through */ }
+  }
+
+  // 2. Try SSO silent (uses existing O365 browser session, no popup)
   try {
-    const result = await msalInst.acquireTokenSilent(request);
+    const result = await msalInst.ssoSilent(request);
     return result.accessToken;
-  } catch {
+  } catch { /* fall through to popup */ }
+
+  // 3. Popup fallback (requires popup allowed in browser)
+  try {
     const result = await msalInst.loginPopup(request);
     return result.accessToken;
+  } catch (e) {
+    throw new Error('Không thể đăng nhập. Vui lòng cho phép popup cho trang này và thử lại.');
   }
 }
 
