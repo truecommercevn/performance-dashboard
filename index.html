@@ -979,7 +979,6 @@ select:focus { border-color: var(--tc-brand); }
      JAVASCRIPT
      ============================================================ -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-<script src="./msal-browser.min.js"></script>
 <script>
 /* ============================================================
    ██████╗  CONFIG  — edit before deploying
@@ -1165,152 +1164,6 @@ const SIG_COLS = [
 /* ============================================================
    DATA LOADING
    ============================================================ */
-/* ── MSAL instance (created once) ──────────────────────────────────── */
-let _msalInstance = null;
-function getMsal () {
-  if (!_msalInstance) {
-    _msalInstance = new msal.PublicClientApplication({
-      auth: {
-        clientId   : CONFIG.graph.clientId,
-        authority  : `https://login.microsoftonline.com/${CONFIG.graph.tenantId}`,
-        redirectUri: window.location.origin + window.location.pathname
-      },
-      cache: { cacheLocation: 'sessionStorage' }
-    });
-  }
-  return _msalInstance;
-}
-
-/* ── Get Graph API access token (SSO silent → popup fallback) ───────── */
-async function getGraphToken () {
-  const msalInst = getMsal();
-  await msalInst.initialize();
-  // Handle redirect response if returning from login redirect
-  await msalInst.handleRedirectPromise();
-
-  const accounts = msalInst.getAllAccounts();
-  const request  = { scopes: CONFIG.graph.scopes };
-
-  // 1. Try silent with cached account
-  if (accounts.length > 0) {
-    try {
-      const result = await msalInst.acquireTokenSilent({ ...request, account: accounts[0] });
-      return result.accessToken;
-    } catch { /* fall through */ }
-  }
-
-  // 2. Try SSO silent (uses existing O365 browser session, no popup)
-  try {
-    const result = await msalInst.ssoSilent(request);
-    return result.accessToken;
-  } catch { /* fall through to popup */ }
-
-  // 3. Popup fallback (requires popup allowed in browser)
-  try {
-    const result = await msalInst.loginPopup(request);
-    return result.accessToken;
-  } catch (e) {
-    throw new Error('Không thể đăng nhập. Vui lòng cho phép popup cho trang này và thử lại.');
-  }
-}
-
-/* ── Read all Excel files in the Skill Will folder via Graph API ─────
-   Each file  = one SLT  (SLT name parsed from filename)
-   Each sheet = one period (H1 2026, H2 2026 …)  — "Legend" is skipped
-   Permissions on files control who sees whose data automatically.      */
-async function fetchDataFromExcel () {
-  const token   = await getGraphToken();
-  const headers = { Authorization: `Bearer ${token}` };
-  const G       = 'https://graph.microsoft.com/v1.0';
-  const { sharepoint, sitePath, folderPath } = CONFIG.graph;
-
-  // 1. Resolve site id
-  const siteResp = await fetch(`${G}/sites/${sharepoint}:${sitePath}`, { headers });
-  if (!siteResp.ok) throw new Error(`Cannot access SharePoint site (${siteResp.status})`);
-  const siteJson = await siteResp.json();
-  const siteId   = siteJson.id;
-
-  // 2. List Excel files in the folder
-  const folderResp = await fetch(
-    `${G}/sites/${siteId}/drive/root:/${encodeURIComponent(folderPath)}:/children?$filter=endswith(name,'.xlsx')&$select=id,name,parentReference`,
-    { headers }
-  );
-  if (!folderResp.ok) throw new Error(`Cannot list folder "${folderPath}" (${folderResp.status})`);
-  const folderJson = await folderResp.json();
-  const files      = folderJson.value || [];
-  console.log(`[Graph] Found ${files.length} Excel file(s):`, files.map(f => f.name));
-
-  const rows = [];
-
-  for (const file of files) {
-    // Parse SLT name: "Skill Will - Amy Nguyen.xlsx" → "Amy Nguyen"
-    const sltName = file.name.replace(/^Skill Will\s*-\s*/i, '').replace(/\.xlsx$/i, '').trim();
-    const driveId = file.parentReference.driveId;
-    const fileId  = file.id;
-
-    // 3. List worksheets
-    const sheetsResp = await fetch(
-      `${G}/drives/${driveId}/items/${fileId}/workbook/worksheets?$select=id,name`,
-      { headers }
-    );
-    if (!sheetsResp.ok) { console.warn(`[Graph] Cannot read sheets of ${file.name}`); continue; }
-    const sheetsJson = await sheetsResp.json();
-
-    for (const sheet of (sheetsJson.value || [])) {
-      // Skip non-period sheets
-      if (/^legend$/i.test(sheet.name)) continue;
-      // Only accept sheets named like "H1 2026", "H2 2027" etc.
-      if (!/^H[12]\s+\d{4}$/i.test(sheet.name.trim())) {
-        console.log(`[Graph] Skipping sheet "${sheet.name}" in ${file.name}`);
-        continue;
-      }
-      const period = sheet.name.trim();
-
-      // 4. Read used range
-      const rangeResp = await fetch(
-        `${G}/drives/${driveId}/items/${fileId}/workbook/worksheets/${encodeURIComponent(sheet.id)}/usedRange?$select=values`,
-        { headers }
-      );
-      if (!rangeResp.ok) { console.warn(`[Graph] Cannot read sheet "${period}" of ${file.name}`); continue; }
-      const rangeJson = await rangeResp.json();
-      const values    = rangeJson.values || [];
-      if (values.length < 2) continue;
-
-      const hdrs = values[0].map(h => String(h || '').trim());
-      for (let i = 1; i < values.length; i++) {
-        const raw = {};
-        hdrs.forEach((h, idx) => { raw[h] = values[i][idx]; });
-        if (!raw.UKG_ID) continue;
-
-        rows.push({
-          UKG_ID          : String(raw.UKG_ID).trim(),
-          Full_Name       : raw.Full_Name       || raw.Display_Name || '',
-          Display_Name    : raw.Display_Name    || raw.Full_Name    || '',
-          Job_Title       : raw.Job_Title       || '',
-          Department      : raw.Department      || '',
-          Platform        : raw.Platform        || '',
-          Hire_Date       : raw.Hire_Date       || '',
-          Supervisor      : raw.Supervisor      || '',
-          SLT_Name        : sltName,
-          Period          : period,
-          Skill_Score     : raw.Skill_Score  != null && raw.Skill_Score  !== '' ? parseFloat(raw.Skill_Score)  : null,
-          Will_Score      : raw.Will_Score   != null && raw.Will_Score   !== '' ? parseFloat(raw.Will_Score)   : null,
-          PR_Score        : raw.PR_Score     != null && raw.PR_Score     !== '' ? parseFloat(raw.PR_Score)     : null,
-          Color_Code      : raw.Color_Code      || '',
-          Justification   : raw.Justification   || '',
-          // FR fields — will be populated when FR Excel is added
-          Frustration      : null,
-          Flight_Potential : null,
-          FR_Score         : null
-        });
-      }
-      console.log(`[Graph] ${file.name} / ${period}: ${rows.length} rows loaded`);
-    }
-  }
-
-  return rows;
-}
-
 async function fetchData () {
   if (CONFIG.DEMO_MODE) {
     allData = DEMO_DATA;
@@ -1320,12 +1173,14 @@ async function fetchData () {
   document.getElementById('demo-badge').style.display = 'none';
   setLoading('t-sw-svg');
   try {
-    allData = await fetchDataFromExcel();
-    console.log(`[Graph] Total rows loaded: ${allData.length}`);
+    const resp = await fetch('data.json', { cache: 'no-store' });
+    if (!resp.ok) throw new Error(`Cannot load data.json (${resp.status})`);
+    allData = await resp.json();
+    console.log(`[Data] Loaded ${allData.length} rows from data.json`);
     init();
   } catch (err) {
     setError('t-sw-svg', err);
-    console.error('[Graph] fetchData error:', err);
+    console.error('[Data] fetchData error:', err);
   }
 }
 
