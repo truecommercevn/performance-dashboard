@@ -979,19 +979,34 @@ select:focus { border-color: var(--tc-brand); }
      JAVASCRIPT
      ============================================================ -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://alcdn.msauth.net/browser/2.38.3/js/msal-browser.min.js"></script>
 <script>
 /* ============================================================
    ██████╗  CONFIG  — edit before deploying
    ============================================================ */
 const CONFIG = {
-  /* Set DEMO_MODE:false + host HTML on SharePoint to use live data */
+  /* Set DEMO_MODE:false to use live Excel data via Graph API */
   DEMO_MODE   : false,
 
-  siteUrl     : 'https://tcapc.sharepoint.com/sites/performance',
   defaultPeriod : 'H1 2026',
 
-  /* English display names for SLTs/supervisors who are not tracked as
-     employees in the SW/FR lists (so they don't appear in allData).
+  /* ── Graph API / MSAL ──────────────────────────────────────────────────
+     Fill in after IT creates the Azure AD App Registration.
+     clientId  : Application (client) ID from Azure Portal
+     tenantId  : Directory (tenant) ID from Azure Portal
+     sharepoint: hostname of your SharePoint tenant
+     siteId    : path segment of the Performance Dashboard site
+     folderPath: path to the Skill Will folder inside Documents library  */
+  graph : {
+    clientId   : '266bfe30-80b7-44d8-9827-da61d7cfd3e9',
+    tenantId   : 'f8a2c782-de47-4307-b690-bee136c44790',
+    sharepoint : 'tcapc.sharepoint.com',
+    sitePath   : '/sites/performance',
+    folderPath : 'Shared Documents/Skill Will',
+    scopes     : ['Files.Read', 'Sites.Read.All']
+  },
+
+  /* English display names for SLTs/supervisors not tracked as employees.
      Key = Full_Name (Vietnamese format), Value = Display_Name (English).
      Add new SLTs/senior managers here when they join.                   */
   nameOverrides : {
@@ -1150,6 +1165,134 @@ const SIG_COLS = [
 /* ============================================================
    DATA LOADING
    ============================================================ */
+/* ── MSAL instance (created once) ──────────────────────────────────── */
+let _msalInstance = null;
+function getMsal () {
+  if (!_msalInstance) {
+    _msalInstance = new msal.PublicClientApplication({
+      auth: {
+        clientId   : CONFIG.graph.clientId,
+        authority  : `https://login.microsoftonline.com/${CONFIG.graph.tenantId}`,
+        redirectUri: window.location.origin + window.location.pathname
+      },
+      cache: { cacheLocation: 'sessionStorage' }
+    });
+  }
+  return _msalInstance;
+}
+
+/* ── Get Graph API access token (silent first, popup fallback) ──────── */
+async function getGraphToken () {
+  const msalInst = getMsal();
+  await msalInst.initialize();
+  const accounts = msalInst.getAllAccounts();
+  const request  = { scopes: CONFIG.graph.scopes, account: accounts[0] };
+  try {
+    const result = await msalInst.acquireTokenSilent(request);
+    return result.accessToken;
+  } catch {
+    const result = await msalInst.loginPopup(request);
+    return result.accessToken;
+  }
+}
+
+/* ── Read all Excel files in the Skill Will folder via Graph API ─────
+   Each file  = one SLT  (SLT name parsed from filename)
+   Each sheet = one period (H1 2026, H2 2026 …)  — "Legend" is skipped
+   Permissions on files control who sees whose data automatically.      */
+async function fetchDataFromExcel () {
+  const token   = await getGraphToken();
+  const headers = { Authorization: `Bearer ${token}` };
+  const G       = 'https://graph.microsoft.com/v1.0';
+  const { sharepoint, sitePath, folderPath } = CONFIG.graph;
+
+  // 1. Resolve site id
+  const siteResp = await fetch(`${G}/sites/${sharepoint}:${sitePath}`, { headers });
+  if (!siteResp.ok) throw new Error(`Cannot access SharePoint site (${siteResp.status})`);
+  const siteJson = await siteResp.json();
+  const siteId   = siteJson.id;
+
+  // 2. List Excel files in the folder
+  const folderResp = await fetch(
+    `${G}/sites/${siteId}/drive/root:/${encodeURIComponent(folderPath)}:/children?$filter=endswith(name,'.xlsx')&$select=id,name,parentReference`,
+    { headers }
+  );
+  if (!folderResp.ok) throw new Error(`Cannot list folder "${folderPath}" (${folderResp.status})`);
+  const folderJson = await folderResp.json();
+  const files      = folderJson.value || [];
+  console.log(`[Graph] Found ${files.length} Excel file(s):`, files.map(f => f.name));
+
+  const rows = [];
+
+  for (const file of files) {
+    // Parse SLT name: "Skill Will - Amy Nguyen.xlsx" → "Amy Nguyen"
+    const sltName = file.name.replace(/^Skill Will\s*-\s*/i, '').replace(/\.xlsx$/i, '').trim();
+    const driveId = file.parentReference.driveId;
+    const fileId  = file.id;
+
+    // 3. List worksheets
+    const sheetsResp = await fetch(
+      `${G}/drives/${driveId}/items/${fileId}/workbook/worksheets?$select=id,name`,
+      { headers }
+    );
+    if (!sheetsResp.ok) { console.warn(`[Graph] Cannot read sheets of ${file.name}`); continue; }
+    const sheetsJson = await sheetsResp.json();
+
+    for (const sheet of (sheetsJson.value || [])) {
+      // Skip non-period sheets
+      if (/^legend$/i.test(sheet.name)) continue;
+      // Only accept sheets named like "H1 2026", "H2 2027" etc.
+      if (!/^H[12]\s+\d{4}$/i.test(sheet.name.trim())) {
+        console.log(`[Graph] Skipping sheet "${sheet.name}" in ${file.name}`);
+        continue;
+      }
+      const period = sheet.name.trim();
+
+      // 4. Read used range
+      const rangeResp = await fetch(
+        `${G}/drives/${driveId}/items/${fileId}/workbook/worksheets/${encodeURIComponent(sheet.id)}/usedRange?$select=values`,
+        { headers }
+      );
+      if (!rangeResp.ok) { console.warn(`[Graph] Cannot read sheet "${period}" of ${file.name}`); continue; }
+      const rangeJson = await rangeResp.json();
+      const values    = rangeJson.values || [];
+      if (values.length < 2) continue;
+
+      const hdrs = values[0].map(h => String(h || '').trim());
+      for (let i = 1; i < values.length; i++) {
+        const raw = {};
+        hdrs.forEach((h, idx) => { raw[h] = values[i][idx]; });
+        if (!raw.UKG_ID) continue;
+
+        rows.push({
+          UKG_ID          : String(raw.UKG_ID).trim(),
+          Full_Name       : raw.Full_Name       || raw.Display_Name || '',
+          Display_Name    : raw.Display_Name    || raw.Full_Name    || '',
+          Job_Title       : raw.Job_Title       || '',
+          Department      : raw.Department      || '',
+          Platform        : raw.Platform        || '',
+          Hire_Date       : raw.Hire_Date       || '',
+          Supervisor      : raw.Supervisor      || '',
+          SLT_Name        : sltName,
+          Period          : period,
+          Skill_Score     : raw.Skill_Score  != null && raw.Skill_Score  !== '' ? parseFloat(raw.Skill_Score)  : null,
+          Will_Score      : raw.Will_Score   != null && raw.Will_Score   !== '' ? parseFloat(raw.Will_Score)   : null,
+          PR_Score        : raw.PR_Score     != null && raw.PR_Score     !== '' ? parseFloat(raw.PR_Score)     : null,
+          Color_Code      : raw.Color_Code      || '',
+          Justification   : raw.Justification   || '',
+          // FR fields — will be populated when FR Excel is added
+          Frustration      : null,
+          Flight_Potential : null,
+          FR_Score         : null
+        });
+      }
+      console.log(`[Graph] ${file.name} / ${period}: ${rows.length} rows loaded`);
+    }
+  }
+
+  return rows;
+}
+
 async function fetchData () {
   if (CONFIG.DEMO_MODE) {
     allData = DEMO_DATA;
@@ -1159,96 +1302,12 @@ async function fetchData () {
   document.getElementById('demo-badge').style.display = 'none';
   setLoading('t-sw-svg');
   try {
-    // Determine which lists to load based on logged-in user
-    const userInfo = await getCurrentUserInfo();
-    console.log('[DEBUG] Lists to load:', userInfo.lists.map(l => l.sw));
-
-    let allSwResults = [];
-    let allFrResults = [];
-
-    for (const listPair of userInfo.lists) {
-      const swUrl = `${CONFIG.siteUrl}/_api/web/lists/getbytitle('${encodeURIComponent(listPair.sw)}')/items?$top=5000`;
-      const swResp = await fetch(swUrl, { headers:{'Accept':'application/json;odata=verbose'}, credentials:'same-origin' });
-      if (swResp.ok) {
-        const j = await swResp.json();
-        console.log(`[DEBUG] SW "${listPair.sw}": ${j.d.results.length} rows, sltName="${listPair.sltName}"`);
-        // Tag each row with which SLT list it came from
-        allSwResults = allSwResults.concat(j.d.results.map(r => Object.assign({}, r, { _sltName: listPair.sltName || '' })));
-      } else {
-        console.warn(`[DEBUG] SW "${listPair.sw}": fetch failed ${swResp.status}`);
-      }
-
-      const frUrl = `${CONFIG.siteUrl}/_api/web/lists/getbytitle('${encodeURIComponent(listPair.fr)}')/items?$top=5000`;
-      const frResp = await fetch(frUrl, { headers:{'Accept':'application/json;odata=verbose'}, credentials:'same-origin' });
-      if (frResp.ok) {
-        const j = await frResp.json();
-        console.log(`[DEBUG] FR "${listPair.fr}": ${j.d.results.length} rows`);
-        allFrResults = allFrResults.concat(j.d.results);
-      } else {
-        console.warn(`[DEBUG] FR "${listPair.fr}": fetch failed ${frResp.status}`);
-      }
-    }
-    console.log(`[DEBUG] Total SW rows: ${allSwResults.length}, FR rows: ${allFrResults.length}`);
-
-    // Wrap in the shape the rest of the code expects
-    const swJson = { d: { results: allSwResults } };
-    const frJson = { d: { results: allFrResults } };
-
-    // Build FR lookup: UKG_ID||Period → row
-    // cv() extracts .Label from SharePoint Choice objects before building the key
-    const frMap = {};
-    frJson.d.results.forEach(r => { frMap[r.UKG_ID + '||' + cv(r.Period).trim()] = r; });
-
-    // Debug: log FR structure to browser console (F12 → Console tab)
-    console.log('[FR Debug] Total FR rows:', frJson.d.results.length);
-    if (frJson.d.results.length > 0) {
-      const s = frJson.d.results[0];
-      console.log('[FR Debug] FR field names:', Object.keys(s).filter(k => !k.startsWith('odata') && !k.startsWith('__')));
-      console.log('[FR Debug] Sample frMap keys (first 5):', Object.keys(frMap).slice(0, 5));
-      console.log('[FR Debug] UKG_ID value:', s.UKG_ID, '| Period:', cv(s.Period));
-    }
-    console.log('[SW Debug] Total SW rows:', swJson.d.results.length);
-    if (swJson.d.results.length > 0) {
-      const s = swJson.d.results[0];
-      console.log('[SW Debug] SW field names:', Object.keys(s).filter(k => !k.startsWith('odata') && !k.startsWith('__')));
-      console.log('[SW Debug] First SW join key:', s.UKG_ID + '||' + cv(s.Period));
-      console.log('[SW Debug] UKG_ID value:', s.UKG_ID, '| Period raw:', s.Period, '| cv(Period):', cv(s.Period));
-    }
-    // Build fallback FR lookup by UKG_ID only (in case Period values don't match)
-    const frMapByUKG = {};
-    frJson.d.results.forEach(r => { frMapByUKG[r.UKG_ID] = r; });
-
-    // Merge SW + FR by UKG_ID + Period, normalize renamed & Choice columns
-    allData = swJson.d.results.map(sw => {
-      const swPeriodStr = cv(sw.Period).trim();
-      const fr = frMap[sw.UKG_ID + '||' + swPeriodStr] || frMapByUKG[sw.UKG_ID] || {};
-      const merged = Object.assign({}, sw, fr);
-      // Always preserve SW's Period so teamData() period filter still works
-      merged._swPeriod = swPeriodStr;
-      // Renamed columns: prefer new name, fall back to original internal name
-      merged.Full_Name     = merged.Full_Name     || merged.Title;
-      merged.Job_Title     = merged.Job_Title     || merged.Job_Title0 || merged.JobTitle || merged.Title0 || merged.Title1 || '';
-      merged.Skill_Score   = merged.Skill_Score   !== undefined ? merged.Skill_Score   : merged.Skill;
-      merged.Will_Score    = merged.Will_Score    !== undefined ? merged.Will_Score    : merged.Will;
-      merged.Justification = merged.Justification || merged.Note || merged.FR_Note;
-      // FR field name fallbacks (SharePoint may suffix fields with 0 if name conflicts)
-      merged.Frustration      = merged.Frustration      != null ? merged.Frustration      : (merged.Frustration0 != null ? merged.Frustration0 : null);
-      merged.Flight_Potential = merged.Flight_Potential != null ? merged.Flight_Potential : (merged.Flight_Potential0 != null ? merged.Flight_Potential0 : null);
-      // Normalize Choice fields ({Label,Value} → plain string)
-      // Platform, Supervisor, SLT_Name come from SW list — FR may overwrite with null, so always prefer sw.*
-      merged.Platform   = cv(sw.Platform);
-      merged.Supervisor = cv(sw.Supervisor) || cv(sw.Supervisor_Name) || merged.Supervisor || '';
-      merged.SLT_Name   = sw._sltName || '';
-      // If Period is null/empty (PA didn't map it), fall back to defaultPeriod so rows still appear
-      merged.Period     = swPeriodStr || CONFIG.defaultPeriod;
-      merged.Color_Code = cv(merged.Color_Code);
-      SIG_COLS.forEach(sc => { if (sc.key in merged) merged[sc.key] = cv(merged[sc.key]); });
-      return merged;
-    });
-
+    allData = await fetchDataFromExcel();
+    console.log(`[Graph] Total rows loaded: ${allData.length}`);
     init();
   } catch (err) {
     setError('t-sw-svg', err);
+    console.error('[Graph] fetchData error:', err);
   }
 }
 
