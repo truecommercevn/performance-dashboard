@@ -16,8 +16,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 2.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -37,8 +37,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -58,8 +58,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -79,8 +79,8 @@
     "PR_Score": null,
     "Color_Code": "Black",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -100,8 +100,8 @@
     "PR_Score": null,
     "Color_Code": "Yellow",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 4.0,
+    "Flight_Potential": 3.0,
     "FR_Score": null
   },
   {
@@ -121,8 +121,8 @@
     "PR_Score": null,
     "Color_Code": "Black",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -142,8 +142,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -163,8 +163,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 3.0,
     "FR_Score": null
   },
   {
@@ -184,8 +184,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -205,8 +205,8 @@
     "PR_Score": null,
     "Color_Code": "Black",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 4.0,
+    "Flight_Potential": 5.0,
     "FR_Score": null
   },
   {
@@ -226,8 +226,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -247,8 +247,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 3.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -268,8 +268,8 @@
     "PR_Score": null,
     "Color_Code": "Yellow",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -289,8 +289,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -310,8 +310,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -331,8 +331,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 2.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -352,8 +352,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -373,8 +373,8 @@
     "PR_Score": null,
     "Color_Code": "Yellow",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 3.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -394,8 +394,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -415,8 +415,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -436,8 +436,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -457,8 +457,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -478,8 +478,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -499,8 +499,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -520,8 +520,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -541,8 +541,8 @@
     "PR_Score": null,
     "Color_Code": "Black",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 2.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -562,8 +562,8 @@
     "PR_Score": null,
     "Color_Code": "Yellow",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -583,8 +583,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 3.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -604,8 +604,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 3.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -625,8 +625,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -667,8 +667,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -688,8 +688,8 @@
     "PR_Score": null,
     "Color_Code": "Black",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -709,8 +709,8 @@
     "PR_Score": null,
     "Color_Code": "Black",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 4.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -730,8 +730,8 @@
     "PR_Score": null,
     "Color_Code": "Yellow",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 4.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -751,8 +751,8 @@
     "PR_Score": null,
     "Color_Code": "Black",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -772,8 +772,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -793,8 +793,8 @@
     "PR_Score": null,
     "Color_Code": "Black",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -814,8 +814,8 @@
     "PR_Score": null,
     "Color_Code": "Black",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -835,8 +835,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 2.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -856,8 +856,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -877,8 +877,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -898,8 +898,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 2.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -919,8 +919,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 2.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -940,8 +940,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 2.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -961,8 +961,8 @@
     "PR_Score": null,
     "Color_Code": "Black",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -982,8 +982,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 2.0,
+    "Flight_Potential": 3.0,
     "FR_Score": null
   },
   {
@@ -1003,8 +1003,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -1024,8 +1024,8 @@
     "PR_Score": null,
     "Color_Code": "Yellow",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -1045,8 +1045,8 @@
     "PR_Score": null,
     "Color_Code": "Yellow",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -1066,8 +1066,8 @@
     "PR_Score": null,
     "Color_Code": "Yellow",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -1087,8 +1087,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -1108,8 +1108,8 @@
     "PR_Score": null,
     "Color_Code": "Yellow",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 2.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -1129,8 +1129,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 3.0,
     "FR_Score": null
   },
   {
@@ -1150,8 +1150,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 2.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -1171,8 +1171,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 2.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -1192,8 +1192,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -1213,8 +1213,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -1234,8 +1234,8 @@
     "PR_Score": null,
     "Color_Code": "Yellow",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -1255,8 +1255,8 @@
     "PR_Score": null,
     "Color_Code": "Yellow",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -1276,8 +1276,8 @@
     "PR_Score": null,
     "Color_Code": "Yellow",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -1297,8 +1297,8 @@
     "PR_Score": null,
     "Color_Code": "Yellow",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -1318,8 +1318,8 @@
     "PR_Score": null,
     "Color_Code": "Black",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -1339,8 +1339,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -1360,8 +1360,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 2.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -1381,8 +1381,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 2.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -1402,8 +1402,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -1423,8 +1423,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -1507,8 +1507,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 2.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -1528,8 +1528,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 2.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -1549,8 +1549,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 2.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -1570,8 +1570,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 2.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -1591,8 +1591,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 2.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -1612,8 +1612,8 @@
     "PR_Score": null,
     "Color_Code": "Red",
     "Justification": "Chuyển qua TrueAuto vào giữa 09/2026. Khó tính. Không có khả năng giải thích chi tiết, giải thích không đủ thuyết phục. Chưa open đủ để đón nhận góp ý người khác. Tiếng Anh ko tốt",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 4.0,
+    "Flight_Potential": 3.0,
     "FR_Score": null
   },
   {
@@ -1633,8 +1633,8 @@
     "PR_Score": null,
     "Color_Code": "Yellow",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 2.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -1654,8 +1654,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "Điểm mạnh về technical. Làm chậm vì do kĩ quá, kĩ không cần thiết. Nhìn sâu vào vấn đề nhưng tổng quát lại không có. Nhanh làm quen được với các platform mới. Tiếng Anh ko tốt. Lúc trước hiểu về GUI, không hiểu backend, sau này thì đã thay đổi vì chịu khó nghiên cứu. Biết phổ quát, biết rộng vì chịu nghiên cứu",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 3.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -1675,8 +1675,8 @@
     "PR_Score": null,
     "Color_Code": "Yellow",
     "Justification": "Đứng vai trò advisor, có thể influence ng khác được",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 2.0,
+    "Flight_Potential": 3.0,
     "FR_Score": null
   },
   {
@@ -1696,8 +1696,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "Đang overload liên quan ERP 140%, không tìm được người backup. Đang oncall support, làm tốt individual contributor, không có cơ hội interact với global. Vậy career path sao?  Nếu như mang qua làm CIP thì nhiều việc quá",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 3.0,
+    "Flight_Potential": 3.0,
     "FR_Score": null
   },
   {
@@ -1717,8 +1717,8 @@
     "PR_Score": null,
     "Color_Code": "Yellow",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 3.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -1738,8 +1738,8 @@
     "PR_Score": null,
     "Color_Code": "Yellow",
     "Justification": "Kết quả làm việc tốt, tiếng Anh ổn. Theo thang điểm từ 1-10 về skill = 8, tất cả các task giao đều làm được.Đưa lên làm production của Fusion. Giữa tháng 9 chuyển qua TrueAuto\nMotivation: trầm tính, leadership ko phải potential",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 3.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -1759,8 +1759,8 @@
     "PR_Score": null,
     "Color_Code": "Yellow",
     "Justification": "Nghỉ nhiều. Chịu khó học hỏi, đào sâu. Tiếng Anh không tốt",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 3.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -1780,8 +1780,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -1801,8 +1801,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 3.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -1822,8 +1822,8 @@
     "PR_Score": null,
     "Color_Code": "Yellow",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 3.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -1843,8 +1843,8 @@
     "PR_Score": null,
     "Color_Code": "Yellow",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 2.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -1864,8 +1864,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -1885,8 +1885,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -1906,8 +1906,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -1927,8 +1927,8 @@
     "PR_Score": null,
     "Color_Code": "Red",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 4.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -1948,8 +1948,8 @@
     "PR_Score": 2.95,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 2.0,
+    "Flight_Potential": 0.0,
     "FR_Score": null
   },
   {
@@ -1969,8 +1969,8 @@
     "PR_Score": 2.8,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 0.0,
+    "Flight_Potential": 0.0,
     "FR_Score": null
   },
   {
@@ -1990,8 +1990,8 @@
     "PR_Score": 2.6,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 0.0,
+    "Flight_Potential": 0.0,
     "FR_Score": null
   },
   {
@@ -2011,8 +2011,8 @@
     "PR_Score": 3.3,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 2.0,
+    "Flight_Potential": 0.0,
     "FR_Score": null
   },
   {
@@ -2032,8 +2032,8 @@
     "PR_Score": 2.6,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 0.0,
+    "Flight_Potential": 0.0,
     "FR_Score": null
   },
   {
@@ -2053,8 +2053,8 @@
     "PR_Score": 2.6,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 4.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -2074,8 +2074,8 @@
     "PR_Score": 2.95,
     "Color_Code": "Black",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 6.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -2095,8 +2095,8 @@
     "PR_Score": 3.15,
     "Color_Code": "Yellow",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 2.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -2116,8 +2116,8 @@
     "PR_Score": 3.35,
     "Color_Code": "Yellow",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 6.0,
+    "Flight_Potential": 6.0,
     "FR_Score": null
   },
   {
@@ -2158,8 +2158,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -2179,8 +2179,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 4.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -2200,8 +2200,8 @@
     "PR_Score": null,
     "Color_Code": "Yellow",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 4.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -2221,8 +2221,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -2242,8 +2242,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -2263,8 +2263,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -2284,8 +2284,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -2305,8 +2305,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -2326,8 +2326,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 2.0,
+    "Flight_Potential": 3.0,
     "FR_Score": null
   },
   {
@@ -2347,8 +2347,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -2368,8 +2368,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -2410,8 +2410,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -2431,8 +2431,8 @@
     "PR_Score": null,
     "Color_Code": "Yellow",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 3.0,
+    "Flight_Potential": 3.0,
     "FR_Score": null
   },
   {
@@ -2452,8 +2452,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -2473,8 +2473,8 @@
     "PR_Score": null,
     "Color_Code": "Yellow",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -2494,8 +2494,8 @@
     "PR_Score": null,
     "Color_Code": "Red",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 3.0,
     "FR_Score": null
   },
   {
@@ -2515,8 +2515,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 2.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -2536,8 +2536,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -2557,8 +2557,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -2578,8 +2578,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -2599,8 +2599,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 2.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -2620,8 +2620,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -2641,8 +2641,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -2662,8 +2662,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -2683,8 +2683,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -2704,8 +2704,8 @@
     "PR_Score": null,
     "Color_Code": "Yellow",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -2725,8 +2725,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 2.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -2746,8 +2746,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -2767,8 +2767,8 @@
     "PR_Score": null,
     "Color_Code": "Yellow",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 3.0,
+    "Flight_Potential": 5.0,
     "FR_Score": null
   },
   {
@@ -2788,8 +2788,8 @@
     "PR_Score": null,
     "Color_Code": "Yellow",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 4.0,
     "FR_Score": null
   },
   {
@@ -2809,8 +2809,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 4.0,
     "FR_Score": null
   },
   {
@@ -2830,8 +2830,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -2851,8 +2851,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -2872,8 +2872,8 @@
     "PR_Score": null,
     "Color_Code": "Red",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 3.0,
     "FR_Score": null
   },
   {
@@ -2893,8 +2893,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -2914,8 +2914,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -2935,8 +2935,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -2956,8 +2956,8 @@
     "PR_Score": null,
     "Color_Code": "Yellow",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 2.0,
+    "Flight_Potential": 3.0,
     "FR_Score": null
   },
   {
@@ -2977,8 +2977,8 @@
     "PR_Score": null,
     "Color_Code": "Yellow",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -3019,8 +3019,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -3040,8 +3040,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 1.0,
     "FR_Score": null
   },
   {
@@ -3061,8 +3061,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 1.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -3082,8 +3082,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 2.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -3103,8 +3103,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 2.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -3124,8 +3124,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 2.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -3145,8 +3145,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 2.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   },
   {
@@ -3166,8 +3166,8 @@
     "PR_Score": null,
     "Color_Code": "Green",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 2.0,
+    "Flight_Potential": 2.0,
     "FR_Score": null
   }
 ]
