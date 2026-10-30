@@ -206,7 +206,13 @@ def read_sw_file(token, site_id, file_item, slt_name):
 
 # ─── READ FLIGHT RISK ──────────────────────────────────────────────────────
 def read_fr_files(token, site_id):
-    """Return dict keyed by (ukgid, period) → {Frustration, Flight_Potential, FR_Score}"""
+    """Return dict keyed by (ukgid, period) → {Frustration, Flight_Potential, FR_Score}
+
+    FR files may use:
+      - Sheet per period (H1 2026, H2 2026) → period from sheet name
+      - Single sheet with a 'Period' column   → period from cell value
+    Both cases are handled automatically.
+    """
     lookup = {}
     try:
         files = list_folder_files(token, site_id, FR_FOLDER)
@@ -221,22 +227,35 @@ def read_fr_files(token, site_id):
         item_id = file_item["id"]
         for sheet in list_worksheets(token, site_id, item_id):
             sname = sheet["name"].strip()
-            if not PERIOD_RE.match(sname):
-                continue
             values = read_sheet(token, site_id, item_id, sheet["id"])
             if len(values) < 2:
                 continue
             headers = [str(h or "").strip() for h in values[0]]
-            i_ukgid  = col_idx(headers, "UKG_ID")
-            i_frust  = col_idx(headers, "Frustration")
-            i_flight = col_idx(headers, "Flight_Potential")
+            i_ukgid   = col_idx(headers, "UKG_ID")
+            i_period  = col_idx(headers, "Period")
+            i_frust   = col_idx(headers, "Frustration")
+            i_flight  = col_idx(headers, "Flight_Potential")
             i_frscore = col_idx(headers, "FR_Score")
+
+            # Skip sheets with no UKG_ID column (legend / matrix sheets)
+            if i_ukgid < 0:
+                print(f"    skip sheet (no UKG_ID): {sname}")
+                continue
+
+            # Determine if period comes from sheet name or Period column
+            sheet_is_period = bool(PERIOD_RE.match(sname))
             count = 0
             for row in values[1:]:
                 ukgid = safe_str(v(row, i_ukgid))
                 if not ukgid:
                     continue
-                lookup[(ukgid, sname)] = {
+                if sheet_is_period:
+                    period = sname
+                else:
+                    period = safe_str(v(row, i_period))
+                    if not period or not PERIOD_RE.match(period):
+                        continue
+                lookup[(ukgid, period)] = {
                     "Frustration"      : safe_float(v(row, i_frust)),
                     "Flight_Potential" : safe_float(v(row, i_flight)),
                     "FR_Score"         : safe_float(v(row, i_frscore)),
