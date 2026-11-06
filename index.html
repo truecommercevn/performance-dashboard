@@ -26,6 +26,48 @@
 }
 
 /* ============================================================
+   LOGIN OVERLAY
+   ============================================================ */
+#login-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: linear-gradient(135deg, var(--tc-dark), var(--tc-bold));
+  display: flex; align-items: center; justify-content: center;
+}
+.login-box {
+  background: var(--tc-white);
+  border-radius: var(--radius-lg);
+  padding: 40px 48px;
+  width: 360px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+  text-align: center;
+}
+.login-box h2 {
+  font-size: 18px; font-weight: 700;
+  color: var(--tc-dark); margin-bottom: 6px;
+}
+.login-box p.subtitle {
+  font-size: 13px; color: #666; margin-bottom: 24px;
+}
+.login-box input[type=password] {
+  width: 100%; padding: 10px 14px;
+  border: 1.5px solid #d0dbe8; border-radius: var(--radius-sm);
+  font-size: 15px; outline: none; letter-spacing: 2px;
+  transition: border-color .2s;
+}
+.login-box input[type=password]:focus { border-color: var(--tc-brand); }
+.login-box button {
+  margin-top: 14px; width: 100%;
+  background: var(--tc-brand); color: #fff;
+  border: none; border-radius: var(--radius-sm);
+  padding: 10px; font-size: 14px; font-weight: 700;
+  transition: background .2s;
+}
+.login-box button:hover { background: var(--tc-bold); }
+.login-error {
+  margin-top: 10px; font-size: 12px; color: #e53e3e; display: none;
+}
+
+/* ============================================================
    RESET & BASE
    ============================================================ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -788,6 +830,20 @@ select:focus { border-color: var(--tc-brand); }
 <body>
 
 <!-- ============================================================
+     LOGIN OVERLAY
+     ============================================================ -->
+<div id="login-overlay">
+  <div class="login-box">
+    <h2>People Performance Dashboard</h2>
+    <p class="subtitle">Enter your access password</p>
+    <input type="password" id="login-pwd" placeholder="Password"
+           onkeydown="if(event.key==='Enter') handleLogin()" />
+    <button onclick="handleLogin()">Enter</button>
+    <div class="login-error" id="login-error">Incorrect password. Please try again.</div>
+  </div>
+</div>
+
+<!-- ============================================================
      HEADER
      ============================================================ -->
 <div class="header">
@@ -983,6 +1039,16 @@ select:focus { border-color: var(--tc-brand); }
 /* ============================================================
    ██████╗  CONFIG  — edit before deploying
    ============================================================ */
+/* ============================================================
+   ACCESS CONFIG — password → {name, slt}
+   slt: null = see all SLTs; slt: 'Name' = restricted to that SLT only
+   ============================================================ */
+const ACCESS_CONFIG = {
+  'TC-PD-adm-2026': { name: 'Quynh Vo',   slt: null },
+  'TC-PD-amy-4k9x': { name: 'Nghi Tran',  slt: 'Amy Nguyen' },
+  'TC-PD-ton-7m2w': { name: 'Anh Nguyen', slt: 'Toan Nguyen' },
+};
+
 const CONFIG = {
   /* Set DEMO_MODE:false to use live Excel data via Graph API */
   DEMO_MODE   : false,
@@ -1120,6 +1186,7 @@ const DEMO_DATA = [
 /* ============================================================
    STATE
    ============================================================ */
+let currentAccess = null;  // set after login: {name, slt}
 let allData       = [];
 let nameMap       = {};   // Full_Name → Display_Name (built after data load)
 
@@ -1164,6 +1231,19 @@ const SIG_COLS = [
 /* ============================================================
    DATA LOADING
    ============================================================ */
+function handleLogin () {
+  const pwd = document.getElementById('login-pwd').value.trim();
+  const access = ACCESS_CONFIG[pwd];
+  if (!access) {
+    document.getElementById('login-error').style.display = 'block';
+    document.getElementById('login-pwd').value = '';
+    return;
+  }
+  currentAccess = access;
+  document.getElementById('login-overlay').style.display = 'none';
+  fetchData();
+}
+
 async function fetchData () {
   if (CONFIG.DEMO_MODE) {
     allData = DEMO_DATA;
@@ -1248,11 +1328,16 @@ function populateFilters () {
     pSel.value = currentPeriod;
   }
 
-  // SLT dropdown — only from rows with a valid SLT_Name (excludes SLT-level employees)
-  const slts = ['All', ...[...new Set(allData.filter(isEmployee).map(r => r.SLT_Name).filter(Boolean))].sort()];
-  document.getElementById('slt-sel').innerHTML = slts.map(s =>
-    `<option value="${s}" ${s === currentSLT ? 'selected':''} >${s === 'All' ? 'All SLTs' : resolveDisplayName(s)}</option>`
+  // SLT dropdown — restricted by currentAccess.slt if set
+  const allowedSLT = currentAccess && currentAccess.slt ? currentAccess.slt : null;
+  const allSLTs = [...new Set(allData.filter(isEmployee).map(r => r.SLT_Name).filter(Boolean))].sort();
+  const slts = allowedSLT ? [allowedSLT] : ['All', ...allSLTs];
+  const sltSel = document.getElementById('slt-sel');
+  sltSel.innerHTML = slts.map(s =>
+    `<option value="${s}" ${s === (allowedSLT || currentSLT) ? 'selected':''} >${s === 'All' ? 'All SLTs' : resolveDisplayName(s)}</option>`
   ).join('');
+  sltSel.disabled = !!allowedSLT;
+  if (allowedSLT) { currentSLT = allowedSLT; }
 
   // Platform dropdown — cascades by SLT
   refreshPlatformDropdown();
@@ -2557,7 +2642,10 @@ function fmt2(v) { const n = parseFloat(v); return isNaN(n) ? '—' : n.toFixed(
 /* ============================================================
    BOOT
    ============================================================ */
-document.addEventListener('DOMContentLoaded', fetchData);
+document.addEventListener('DOMContentLoaded', () => {
+  // Show login overlay — fetchData() called after correct password
+  document.getElementById('login-pwd').focus();
+});
 </script>
 </body>
 </html>
