@@ -293,6 +293,35 @@ def main():
     fr_lookup = read_fr_files(token, site_id)
     print(f"  ✅ FR lookup: {len(fr_lookup)} (ukgid, period) entries")
 
+    # ── Build Full_Name → Display_Name lookup from all employees ──
+    name_lookup = {}
+    for row in all_rows:
+        fn = (row.get("Full_Name") or "").strip()
+        dn = (row.get("Display_Name") or "").strip()
+        if fn and dn:
+            name_lookup[fn] = dn
+
+    def resolve_supervisor(raw):
+        """Return English display name for a supervisor raw value."""
+        if not raw:
+            return raw
+        raw = raw.strip()
+        # Direct match in lookup
+        if raw in name_lookup:
+            return name_lookup[raw]
+        # Fallback: "Last, First Middle" → "First Middle Last"
+        if "," in raw:
+            parts = raw.split(",", 1)
+            last, first = parts[0].strip(), parts[1].strip()
+            if first:
+                return f"{first} {last}"
+        return raw
+
+    # ── Resolve Supervisor names to English ──
+    for row in all_rows:
+        row["Supervisor"] = resolve_supervisor(row.get("Supervisor", ""))
+    print(f"→ Resolved supervisor names for {len(all_rows)} rows")
+
     # ── Join FR into SW rows ──
     merged = 0
     for row in all_rows:
