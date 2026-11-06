@@ -1199,18 +1199,19 @@ let nameMap       = {};   // Full_Name → Display_Name (built after data load)
 function resolveDisplayName (fullName) {
   if (!fullName || fullName === 'All') return fullName;
   const key = fullName.trim();
-  const mapped = nameMap[key];
-  if (mapped && mapped !== key) return mapped;
+  // Helper: reverse "Last, First" → "First Last"
+  function reverseComma (s) {
+    if (!s || !s.includes(',')) return s;
+    const comma = s.indexOf(',');
+    const last  = s.substring(0, comma).trim();
+    const first = s.substring(comma + 1).trim();
+    return first ? first + ' ' + last : s;
+  }
   const override = CONFIG.nameOverrides && CONFIG.nameOverrides[key];
   if (override) return override;
-  // "Last, First Middle" → "First Middle Last" as last-resort fallback
-  if (key.includes(',')) {
-    const comma = key.indexOf(',');
-    const last  = key.substring(0, comma).trim();
-    const first = key.substring(comma + 1).trim();
-    if (first) return first + ' ' + last;
-  }
-  return key;
+  const mapped = nameMap[key];
+  if (mapped && mapped !== key) return reverseComma(mapped); // also fix if Display_Name still has comma
+  return reverseComma(key); // fallback reversal
 }
 let currentPeriod = CONFIG.defaultPeriod;
 let currentPlat    = 'All';
@@ -1357,7 +1358,7 @@ function refreshManagerDropdown () {
   const slt = document.getElementById('slt-sel').value;
   const source = (slt === 'All' ? allData : allData.filter(r => r.SLT_Name === slt))
     .filter(r => isEmployee(r) && r.Period === currentPeriod);
-  let managers = [...new Set(source.map(r => r.Supervisor).filter(Boolean))].sort();
+  let managers = [...new Set(source.map(r => r.Supervisor).filter(s => s && s !== '#N/A'))].sort();
   // Keep all supervisors including the Dept Head themselves
   // (selecting the Dept Head as supervisor shows their direct reports)
   managers = ['All', ...managers];
