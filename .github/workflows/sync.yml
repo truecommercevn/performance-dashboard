@@ -4,9 +4,9 @@ on:
   # Run manually from GitHub Actions tab
   workflow_dispatch:
 
-  # Auto-run every Monday 8:00 AM Vietnam time (UTC+7 = 01:00 UTC)
+  # Auto-run every hour
   schedule:
-    - cron: '0 1 * * 1'
+    - cron: '0 * * * *'
 
 jobs:
   sync:
