@@ -1881,79 +1881,43 @@ function _makeMatrixPlugin (groups, isSW) {
     afterDraw (ch) {
       const { ctx, chartArea: { top, bottom, left, right }, scales: { x, y } } = ch;
       const hitAreas = [];
-      const LH = 14;   // px per name row
-      const PAD = 2;   // vertical gap between blocks
-      const LABEL_W = 125; // estimated max label width
+      const LH = 14; // px per name row
 
-      // Phase 1 — measure actual label widths & compute initial positions
-      ctx.font = "11px 'Manrope','Segoe UI',sans-serif";
-      const slots = groups.map(p => {
+      groups.forEach(p => {
         const px = x.getPixelForValue(p.x), py = y.getPixelForValue(p.y);
         const n = p.entries.length;
+
+        // Place name block: centered on dot, clamped to chart area
         const blockH = n * LH;
-        const nearRight = px > right - 140;
-        const align = nearRight ? 'right' : 'left';
-        const labelX = px + (nearRight ? -9 : 9);
-        // Measure actual max name width for this group
-        const maxW = Math.max(...p.entries.map(e => ctx.measureText(e.name).width), 20);
-        const lxMin = align === 'left' ? labelX     : labelX - maxW - 2;
-        const lxMax = align === 'left' ? labelX + maxW + 2 : labelX;
         let startY = py - blockH / 2 + LH * 0.7;
         startY = Math.max(top + LH, Math.min(bottom - blockH + LH, startY));
-        return { p, px, py, startY, blockH, n, labelX, align, lxMin, lxMax };
-      });
 
-      // Phase 2 — iterative pairwise collision: only push if labels overlap *both* axes
-      for (let iter = 0; iter < 100; iter++) {
-        let moved = false;
-        for (let i = 0; i < slots.length; i++) {
-          for (let j = i + 1; j < slots.length; j++) {
-            const a = slots[i], b = slots[j];
-            // Skip if no horizontal overlap
-            if (a.lxMax <= b.lxMin || b.lxMax <= a.lxMin) continue;
-            // Compute vertical overlap
-            const aBot = a.startY + a.blockH;
-            const bBot = b.startY + b.blockH;
-            const ov = Math.min(aBot, bBot) - Math.max(a.startY, b.startY);
-            if (ov > 0) {
-              const push = ov / 2 + PAD / 2;
-              if (a.startY <= b.startY) {
-                a.startY = Math.max(top + LH,               a.startY - push);
-                b.startY = Math.min(bottom - b.blockH + LH, b.startY + push);
-              } else {
-                b.startY = Math.max(top + LH,               b.startY - push);
-                a.startY = Math.min(bottom - a.blockH + LH, a.startY + push);
-              }
-              moved = true;
-            }
-          }
-        }
-        if (!moved) break;
-      }
+        // Decide label side: right by default, flip left if near right edge
+        const labelX = px + (px > right - 140 ? -(9) : 9);
+        const align   = px > right - 140 ? 'right' : 'left';
 
-      // Phase 3 — draw labels (no leader lines)
-      ctx.font = "11px 'Manrope','Segoe UI',sans-serif";
-      slots.forEach(s => {
-        ctx.textAlign = s.align;
-        s.p.entries.forEach((e, i) => {
-          const ly = s.startY + i * LH;
+        ctx.font = "11px 'Manrope','Segoe UI',sans-serif";
+        ctx.textAlign = align;
+
+        p.entries.forEach((e, i) => {
+          const ly = startY + i * LH;
           ctx.fillStyle = e.color;
-          ctx.fillText(e.name, s.labelX, ly);
+          ctx.fillText(e.name, labelX, ly);
           const w = ctx.measureText(e.name).width;
-          const hx = s.align === 'left' ? s.labelX - 2 : s.labelX - w - 2;
+          const hx = align === 'left' ? labelX - 2 : labelX - w - 2;
           hitAreas.push({ x: hx, y: ly - 12, w: w + 4, h: 14, id: e.id });
         });
-      });
 
-      // Phase 4 — draw dots on top
-      slots.forEach(s => {
-        ctx.beginPath(); ctx.arc(s.px, s.py, 6, 0, Math.PI * 2);
+        // Draw dot — show count badge if >1 person at same coordinate
+        ctx.beginPath(); ctx.arc(px, py, 6, 0, Math.PI * 2);
         ctx.fillStyle = '#1B6FC8'; ctx.fill();
         ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.8; ctx.stroke();
-        if (s.n > 1) {
+
+        if (n > 1) {
           ctx.font = "bold 9px 'Manrope','Segoe UI',sans-serif";
-          ctx.fillStyle = '#fff'; ctx.textAlign = 'center';
-          ctx.fillText(String(s.n), s.px, s.py + 3.5);
+          ctx.fillStyle = '#fff';
+          ctx.textAlign = 'center';
+          ctx.fillText(String(n), px, py + 3.5);
         }
       });
 
