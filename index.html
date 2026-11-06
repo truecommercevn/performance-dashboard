@@ -1199,17 +1199,19 @@ let nameMap       = {};   // Full_Name → Display_Name (built after data load)
    4. Original name as fallback                                              */
 function resolveDisplayName (fullName) {
   if (!fullName || fullName === 'All') return fullName;
-  const mapped = nameMap[fullName];
-  if (mapped && mapped !== fullName) return mapped;
-  const override = CONFIG.nameOverrides && CONFIG.nameOverrides[fullName];
+  const key = fullName.trim();
+  const mapped = nameMap[key];
+  if (mapped && mapped !== key) return mapped;
+  const override = CONFIG.nameOverrides && CONFIG.nameOverrides[key];
   if (override) return override;
-  if (fullName.includes(',')) {
-    const comma = fullName.indexOf(',');
-    const last  = fullName.substring(0, comma).trim();
-    const first = fullName.substring(comma + 1).trim();
+  // "Last, First Middle" → "First Middle Last" as last-resort fallback
+  if (key.includes(',')) {
+    const comma = key.indexOf(',');
+    const last  = key.substring(0, comma).trim();
+    const first = key.substring(comma + 1).trim();
     if (first) return first + ' ' + last;
   }
-  return fullName;
+  return key;
 }
 let currentPeriod = CONFIG.defaultPeriod;
 let currentPlat    = 'All';
@@ -1314,9 +1316,12 @@ function init () {
    ============================================================ */
 function populateFilters () {
   // Build nameMap: Full_Name → Display_Name (for English name display in dropdowns)
+  // Keys are trimmed to avoid whitespace mismatch
   nameMap = {};
   allData.forEach(r => {
-    if (r.Full_Name) nameMap[r.Full_Name] = r.Display_Name || r.Full_Name;
+    const fn = (r.Full_Name || '').trim();
+    const dn = (r.Display_Name || '').trim();
+    if (fn && dn) nameMap[fn] = dn;
   });
 
   const periods = [...new Set(allData.map(r => r.Period).filter(Boolean))]
