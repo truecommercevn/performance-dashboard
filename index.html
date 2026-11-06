@@ -869,13 +869,13 @@ select:focus { border-color: var(--tc-brand); }
   <div class="emp-name-chip" id="emp-name-chip"></div>
 
   <div class="control-group" id="slt-group">
-    <span class="control-label">SLT</span>
+    <span class="control-label">Dept Head</span>
     <select id="slt-sel" onchange="onSLTChange()">
-      <option value="All">All SLTs</option>
+      <option value="All">All Dept Heads</option>
     </select>
   </div>
   <div class="control-group" id="emp-slt-chip" style="display:none">
-    <span class="control-label">SLT</span>
+    <span class="control-label">Dept Head</span>
     <span id="emp-slt-val" style="font-size:13px;font-weight:500;color:#00112A;padding:4px 10px;background:#f0f5fa;border-radius:6px;border:0.5px solid #d0dde8"></span>
   </div>
 
@@ -1336,7 +1336,7 @@ function populateFilters () {
   const slts = allowedSLT ? [allowedSLT] : ['All', ...allSLTs];
   const sltSel = document.getElementById('slt-sel');
   sltSel.innerHTML = slts.map(s =>
-    `<option value="${s}" ${s === (allowedSLT || currentSLT) ? 'selected':''} >${s === 'All' ? 'All SLTs' : resolveDisplayName(s)}</option>`
+    `<option value="${s}" ${s === (allowedSLT || currentSLT) ? 'selected':''} >${s === 'All' ? 'All Dept Heads' : resolveDisplayName(s)}</option>`
   ).join('');
   sltSel.disabled = !!allowedSLT;
   if (allowedSLT) { currentSLT = allowedSLT; }
@@ -1353,8 +1353,12 @@ function refreshManagerDropdown () {
   const slt = document.getElementById('slt-sel').value;
   const source = (slt === 'All' ? allData : allData.filter(r => r.SLT_Name === slt)).filter(isEmployee);
   let managers = [...new Set(source.map(r => r.Supervisor).filter(Boolean))].sort();
-  // Exclude the SLT themselves — they manage the tree, not a supervisor sub-group
-  if (slt !== 'All') managers = managers.filter(m => m !== slt);
+  // Exclude the Dept Head themselves — they manage the tree, not a supervisor sub-group
+  // Compare both raw name and resolved display name to handle format variations
+  if (slt !== 'All') {
+    const sltDisplay = resolveDisplayName(slt);
+    managers = managers.filter(m => m !== slt && resolveDisplayName(m) !== sltDisplay);
+  }
   managers = ['All', ...managers];
   // If previously selected manager no longer exists in new SLT, reset to All
   if (!managers.includes(currentManager)) currentManager = 'All';
