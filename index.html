@@ -1881,56 +1881,57 @@ function _makeMatrixPlugin (groups, isSW) {
     afterDraw (ch) {
       const { ctx, chartArea: { top, bottom, left, right }, scales: { x, y } } = ch;
       const hitAreas = [];
-      const LH = 14;  // px per name row
-      const PAD = 3;  // extra gap between label blocks
+      const LH = 14;   // px per name row
+      const PAD = 2;   // vertical gap between blocks
+      const LABEL_W = 125; // estimated max label width
 
-      // Phase 1 — compute initial slot for each dot group
+      // Phase 1 — measure actual label widths & compute initial positions
+      ctx.font = "11px 'Manrope','Segoe UI',sans-serif";
       const slots = groups.map(p => {
         const px = x.getPixelForValue(p.x), py = y.getPixelForValue(p.y);
         const n = p.entries.length;
         const blockH = n * LH;
         const nearRight = px > right - 140;
+        const align = nearRight ? 'right' : 'left';
+        const labelX = px + (nearRight ? -9 : 9);
+        // Measure actual max name width for this group
+        const maxW = Math.max(...p.entries.map(e => ctx.measureText(e.name).width), 20);
+        const lxMin = align === 'left' ? labelX     : labelX - maxW - 2;
+        const lxMax = align === 'left' ? labelX + maxW + 2 : labelX;
         let startY = py - blockH / 2 + LH * 0.7;
         startY = Math.max(top + LH, Math.min(bottom - blockH + LH, startY));
-        return { p, px, py, startY, blockH, n,
-                 labelX: px + (nearRight ? -9 : 9),
-                 align: nearRight ? 'right' : 'left' };
+        return { p, px, py, startY, blockH, n, labelX, align, lxMin, lxMax };
       });
 
-      // Phase 2 — resolve vertical overlaps per side (left / right)
-      ['left', 'right'].forEach(side => {
-        const ss = slots.filter(s => s.align === side).sort((a, b) => a.startY - b.startY);
-        for (let iter = 0; iter < 60; iter++) {
-          let moved = false;
-          for (let i = 1; i < ss.length; i++) {
-            const a = ss[i - 1], b = ss[i];
-            const overlap = (a.startY + a.blockH + PAD) - b.startY;
-            if (overlap > 0.5) {
-              a.startY = Math.max(top + LH, a.startY - overlap / 2);
-              b.startY = Math.min(bottom - b.blockH + LH, b.startY + overlap / 2);
+      // Phase 2 — iterative pairwise collision: only push if labels overlap *both* axes
+      for (let iter = 0; iter < 100; iter++) {
+        let moved = false;
+        for (let i = 0; i < slots.length; i++) {
+          for (let j = i + 1; j < slots.length; j++) {
+            const a = slots[i], b = slots[j];
+            // Skip if no horizontal overlap
+            if (a.lxMax <= b.lxMin || b.lxMax <= a.lxMin) continue;
+            // Compute vertical overlap
+            const aBot = a.startY + a.blockH;
+            const bBot = b.startY + b.blockH;
+            const ov = Math.min(aBot, bBot) - Math.max(a.startY, b.startY);
+            if (ov > 0) {
+              const push = ov / 2 + PAD / 2;
+              if (a.startY <= b.startY) {
+                a.startY = Math.max(top + LH,               a.startY - push);
+                b.startY = Math.min(bottom - b.blockH + LH, b.startY + push);
+              } else {
+                b.startY = Math.max(top + LH,               b.startY - push);
+                a.startY = Math.min(bottom - a.blockH + LH, a.startY + push);
+              }
               moved = true;
             }
           }
-          if (!moved) break;
         }
-      });
+        if (!moved) break;
+      }
 
-      // Phase 3 — subtle leader lines for displaced labels
-      ctx.save();
-      ctx.lineWidth = 0.8;
-      slots.forEach(s => {
-        const midY = s.startY + (s.n - 1) * LH / 2;
-        if (Math.abs(midY - s.py) > 10) {
-          ctx.strokeStyle = 'rgba(100,120,140,0.28)';
-          ctx.beginPath();
-          ctx.moveTo(s.px + (s.align === 'left' ? 7 : -7), s.py);
-          ctx.lineTo(s.labelX + (s.align === 'left' ? -4 : 4), midY);
-          ctx.stroke();
-        }
-      });
-      ctx.restore();
-
-      // Phase 4 — draw labels
+      // Phase 3 — draw labels (no leader lines)
       ctx.font = "11px 'Manrope','Segoe UI',sans-serif";
       slots.forEach(s => {
         ctx.textAlign = s.align;
@@ -1944,7 +1945,7 @@ function _makeMatrixPlugin (groups, isSW) {
         });
       });
 
-      // Phase 5 — draw dots on top of labels
+      // Phase 4 — draw dots on top
       slots.forEach(s => {
         ctx.beginPath(); ctx.arc(s.px, s.py, 6, 0, Math.PI * 2);
         ctx.fillStyle = '#1B6FC8'; ctx.fill();
