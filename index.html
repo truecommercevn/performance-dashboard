@@ -1351,7 +1351,8 @@ function populateFilters () {
 // Rebuild manager dropdown based on selected SLT (call after SLT changes or on initial load)
 function refreshManagerDropdown () {
   const slt = document.getElementById('slt-sel').value;
-  const source = (slt === 'All' ? allData : allData.filter(r => r.SLT_Name === slt)).filter(isEmployee);
+  const source = (slt === 'All' ? allData : allData.filter(r => r.SLT_Name === slt))
+    .filter(r => isEmployee(r) && r.Period === currentPeriod);
   let managers = [...new Set(source.map(r => r.Supervisor).filter(Boolean))].sort();
   // Keep all supervisors including the Dept Head themselves
   // (selecting the Dept Head as supervisor shows their direct reports)
@@ -1419,34 +1420,8 @@ function teamData () {
 
   if (currentManager === 'All') return base;
 
-  // Hierarchical supervisor filter: include everyone in the subtree under currentManager
-  // Build supervisor → [employee names] map from base data
-  const supMap = {};
-  base.forEach(r => {
-    const sup = r.Supervisor || '';
-    if (sup) {
-      if (!supMap[sup]) supMap[sup] = [];
-      supMap[sup].push(r);
-    }
-  });
-
-  // BFS to collect all UKG_IDs in the org subtree
-  const inSubtree = new Set();
-  const queue = [currentManager];
-  const visited = new Set();
-  while (queue.length) {
-    const mgr = queue.shift();
-    if (visited.has(mgr)) continue;
-    visited.add(mgr);
-    (supMap[mgr] || []).forEach(r => {
-      inSubtree.add(r.UKG_ID);
-      // If this employee is also a supervisor (has their own reports), recurse into them
-      const empName = r.Full_Name || r.Display_Name || '';
-      if (empName && supMap[empName] && !visited.has(empName)) queue.push(empName);
-    });
-  }
-
-  return base.filter(r => inSubtree.has(r.UKG_ID));
+  // Direct supervisor filter: show only employees whose Supervisor field matches
+  return base.filter(r => r.Supervisor === currentManager);
 }
 
 function empHistory (id) {
@@ -1703,7 +1678,7 @@ function renderTeamSW () {
       <td><a class="name-link">${h(r.Full_Name||r.Display_Name)}</a></td>
       <td>${h(r.Department||r.Dept||'—')}</td>
       <td>${h(jobTitle)}</td>
-      <td>${h(r.Supervisor||'—')}</td>
+      <td>${h(resolveDisplayName(r.Supervisor)||'—')}</td>
       <td>${hireDate}</td>
       <td>${h(cv(r.Platform))}</td>
       <td>${fmt2(r.PR_Score)}</td>
@@ -2073,7 +2048,7 @@ function renderTeamFR () {
       <td><a class="name-link">${h(r.Full_Name||r.Display_Name)}</a></td>
       <td>${h(r.Department||r.Dept||'—')}</td>
       <td>${h(r.Job_Title||r.Title0||r.Title1||'')}</td>
-      <td>${h(r.Supervisor||'—')}</td>
+      <td>${h(resolveDisplayName(r.Supervisor)||'—')}</td>
       <td>${hireDate}</td>
       <td>${h(cv(r.Platform))}</td>
       <td><span class="risk-pill-sm" style="background:${q.bg};color:${q.tc}">${q.risk}</span></td>
