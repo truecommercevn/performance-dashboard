@@ -1940,7 +1940,7 @@ function buildSWMatrixChart (canvasId, data) {
     min: 0, max: 10,
     title: { display: true, text: label, font: { size: 13, weight: '500', family: "'Manrope','Segoe UI',sans-serif" }, color: '#00112A' },
     ticks: { stepSize: 1, font: { size: 11, family: "'Manrope','Segoe UI',sans-serif" }, color: '#445566', callback: v => (v === 0 || (isY && v === 10)) ? '' : (Number.isInteger(v) && v >= 0 && v <= 10 ? v : '') },
-    grid: { display: false }
+    grid: { color: 'rgba(200,216,232,.25)', lineWidth: 0.6 }
   });
   _swChart = new Chart(document.getElementById(canvasId), {
     type: 'scatter',
@@ -1971,7 +1971,7 @@ function buildFRMatrixChart (canvasId, data) {
     min: 0, max: 10,
     title: { display: true, text: label, font: { size: 13, weight: '500', family: "'Manrope','Segoe UI',sans-serif" }, color: '#00112A' },
     ticks: { stepSize: 1, font: { size: 11, family: "'Manrope','Segoe UI',sans-serif" }, color: '#445566', callback: v => (v === 0 || (isY && v === 10)) ? '' : (Number.isInteger(v) && v >= 0 && v <= 10 ? v : '') },
-    grid: { display: false }
+    grid: { color: 'rgba(200,216,232,.25)', lineWidth: 0.6 }
   });
   _frChart = new Chart(document.getElementById(canvasId), {
     type: 'scatter',
