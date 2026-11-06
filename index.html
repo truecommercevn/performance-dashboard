@@ -1353,12 +1353,8 @@ function refreshManagerDropdown () {
   const slt = document.getElementById('slt-sel').value;
   const source = (slt === 'All' ? allData : allData.filter(r => r.SLT_Name === slt)).filter(isEmployee);
   let managers = [...new Set(source.map(r => r.Supervisor).filter(Boolean))].sort();
-  // Exclude the Dept Head themselves — they manage the tree, not a supervisor sub-group
-  // Compare both raw name and resolved display name to handle format variations
-  if (slt !== 'All') {
-    const sltDisplay = resolveDisplayName(slt);
-    managers = managers.filter(m => m !== slt && resolveDisplayName(m) !== sltDisplay);
-  }
+  // Keep all supervisors including the Dept Head themselves
+  // (selecting the Dept Head as supervisor shows their direct reports)
   managers = ['All', ...managers];
   // If previously selected manager no longer exists in new SLT, reset to All
   if (!managers.includes(currentManager)) currentManager = 'All';
