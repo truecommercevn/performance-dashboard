@@ -4342,8 +4342,8 @@
     "PR_Score": null,
     "Color_Code": "Yellow",
     "Justification": "",
-    "Frustration": null,
-    "Flight_Potential": null,
+    "Frustration": 5.0,
+    "Flight_Potential": 3.0,
     "FR_Score": null
   },
   {
